@@ -1,0 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* FUNDO DA TELA */
+html{
+    width: 100vw;
+    height: 100vh;
+    font-size: 62.5%;
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body{
+    background: linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/principal.jpeg);
+    background-position: center center;
+    background-size: cover;
+    background-position-y: 0px;
+    background-repeat: no-repeat;
+}
+
+/* MENU - HEADER - NavBar */
+header{
+    width: 100%;
+    height: 7vh;
+    background: rgba(22, 22, 22, 0.2);
+}
+
+.menu{
+    text-transform: uppercase;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+.logo{
+    font-size: 2rem;
+    letter-spacing: 0.4rem;
+    cursor: pointer;
+}
+
+.menu .list-itens{
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+
+.menu .list-itens a{
+    text-decoration: none;
+    color: white;
+    padding: 1.5rem;
+    transition: 2ms ease-in;
+    position: relative;
+}
+
+.menu .list-itens a:before{
+   content: ' ';
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
+   width: 0px;
+   height: 1px;
+   background-color: blue;
+   transition: all 1.5s ease;
+}
+
+.menu .list-itens a:hover:before{
+    width: 100%;
+}
+
+/* CENTRO - CONTEUDO PRINCIPAL */
+main{
+    height: 93vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TEXTOS PRINCIPAIS  */
+.primary-text{
+    width: 850px;
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.second-text{
+    margin-bottom: 7rem;
+    font-size: 2rem;
+    color: rgb(49, 49, 227);
+    text-transform: uppercase;
+}
+
+/* BOTOES  */
+
+.btn {
+    display:  flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn button{
+    width: 250px;
+    height: 80px;
+    cursor: pointer;
+    border:  1px solid white;
+    color: white;
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+    border-radius: 20px;
+    position: relative;
+    transition: 1.5s;
+}
+
+.btn button:hover{
+    color: rgb(16, 16, 180);
+    border: none;
+}
+
+.btn button::before{
+    content: ' ';
+    border-radius: 20px;
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    width: 0px;
+    height: 80px;
+    background-color: rgb(184, 184, 184);
+    z-index: -1;
+    transition: 1s;
+}
+
+.btn button:hover:before{
+    width: 100%;
+}
