@@ -87,46 +87,14 @@ main{
     flex-direction: column;
 }
 
-.firstSection{
-    width: 100%;
-    height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/principal.jpeg);
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-
-    scroll-snap-align: start;
-}
-
-.secondSection{
-    width: 100%;
-    height: 100vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/segundaImg.jpeg);
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-
-
-    scroll-snap-align: start;
-}
-
-
 .main-content{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
+
 
 /* TEXTOS PRINCIPAIS  */
 .primary-text{
@@ -144,7 +112,6 @@ main{
 }
 
 /* BOTOES  */
-
 .btn {
     display:  flex;
     justify-content: center;
@@ -173,6 +140,7 @@ main{
     border: none;
 }
 
+
 .btn button::before{
     content: ' ';
     border-radius: 20px;
@@ -188,4 +156,514 @@ main{
 
 .btn button:hover:before{
     width: 100%;
+}
+
+.firstSection{
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/principal.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    scroll-snap-align: start;
+}
+
+.segundaSection{
+    width: 100%;
+    height: 100vh;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/segundaImg.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    scroll-snap-align: start;
+}
+
+.main-content2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px;
+}
+
+.fotoBoxe{
+    width: 800px;
+    border-radius: 20px;
+}
+
+.descricao{
+    font-size: 24px;
+    margin: 40px;
+    text-align: justify;
+}
+
+.primary-text2{
+    width: 850px;
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.terceiraSection{
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/principal.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    scroll-snap-align: start;
+
+    padding: 100px 40px;
+}
+
+.primary-text3{
+    width: 100%;
+    font-size: 5rem;
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.container{
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.col-4{
+    width: calc(33.3333% - 13.3333px);
+}
+
+.card{
+    width: 100%;
+    min-height: 400px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
+    background-color: white;
+
+}
+
+
+.card h1{
+    font-size: 2.5rem;
+    margin: 10px;
+    color: rgb(3, 0, 202);
+}
+
+.card img{
+    width: 100%;
+    height: 320px;
+
+    object-fit: cover;
+    display: block;
+}
+
+.card p{
+    font-size: 1.4rem;
+    line-height: 1.4;
+
+    text-align: justify;
+    margin: 0 10px 10px;
+}
+
+
+.card .d-flex{
+    margin-top: auto;
+    padding: 0 10px 10px;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card a{
+    font-size: 1.4rem;
+    color: rgb(25, 2, 230);
+    text-decoration: none;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 1024px) {
+
+    /* HEADER */
+    header {
+        height: 80px;
+    }
+
+    .menu {
+        padding: 0 30px;
+        justify-content: space-between;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+    }
+
+    .menu .list-itens {
+        gap: 0;
+    }
+
+    .menu .list-itens a {
+        font-size: 1.4rem;
+        padding: 1rem;
+    }
+
+
+    /* PRIMEIRA SECTION */
+
+    .primary-text {
+        width: 80%;
+        font-size: 4.5rem;
+    }
+
+    .second-text {
+        font-size: 1.8rem;
+    }
+
+
+    /* SEGUNDA SECTION */
+
+    .primary-text2 {
+        width: 100%;
+        font-size: 4rem;
+    }
+
+    .main-content2 {
+        margin: 30px;
+        gap: 20px;
+    }
+
+    .fotoBoxe {
+        width: 50%;
+    }
+
+    .descricao {
+        font-size: 1.8rem;
+        margin: 20px;
+    }
+
+
+    /* MODALIDADES */
+
+    .col-4 {
+        width: calc(50% - 10px);
+    }
+
+    .card {
+        min-height: 500px;
+    }
+}
+
+/* =========================================
+   CELULAR
+   ========================================= */
+
+@media (max-width: 767px) {
+
+    html {
+        font-size: 62.5%;
+        scroll-snap-type: none;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    header {
+        height: 70px;
+        background: rgba(15, 15, 15, 0.85);
+    }
+
+    .menu {
+        padding: 0 20px;
+        justify-content: center;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .menu .list-itens {
+        width: 100%;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .menu .list-itens a {
+        font-size: 1.1rem;
+        padding: 8px;
+    }
+
+
+    /* =========================
+       PRIMEIRA SECTION
+       ========================= */
+
+    .firstSection {
+        min-height: 100vh;
+        height: auto;
+
+        padding: 100px 20px 60px;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .primary-text {
+        width: 100%;
+
+        font-size: 3.2rem;
+        line-height: 1.2;
+
+        margin-bottom: 2rem;
+    }
+
+    .second-text {
+        width: 100%;
+
+        font-size: 1.5rem;
+        line-height: 1.5;
+
+        text-align: center;
+
+        margin-bottom: 4rem;
+    }
+
+
+    /* BOTÕES */
+
+    .btn {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 15px;
+    }
+
+    .btn button {
+        width: 90%;
+        max-width: 300px;
+
+        height: 65px;
+
+        font-size: 1.2rem;
+    }
+
+
+    /* =========================
+       SEGUNDA SECTION
+       ========================= */
+
+    .segundaSection {
+        min-height: 100vh;
+        height: auto;
+
+        padding: 80px 20px;
+    }
+
+    .primary-text2 {
+        width: 100%;
+
+        font-size: 3rem;
+        line-height: 1.2;
+
+        margin-bottom: 30px;
+    }
+
+    .main-content2 {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        margin: 0;
+
+        gap: 20px;
+    }
+
+    .areaLuta {
+        width: 100%;
+    }
+
+    .fotoBoxe {
+        width: 100%;
+
+        max-width: 500px;
+
+        display: block;
+
+        margin: 0 auto;
+
+        border-radius: 15px;
+    }
+
+    .informacoes {
+        width: 100%;
+    }
+
+    .descricao {
+        font-size: 1.6rem;
+
+        line-height: 1.6;
+
+        margin: 0;
+
+        text-align: justify;
+    }
+
+    .informacoes .btn {
+        margin-top: 25px;
+    }
+
+
+    /* =========================
+       TERCEIRA SECTION
+       ========================= */
+
+    .terceiraSection {
+        min-height: 100vh;
+        height: auto;
+
+        padding: 80px 20px;
+    }
+
+    .primary-text3 {
+        width: 100%;
+
+        font-size: 3.2rem;
+
+        margin-bottom: 30px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .row {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 20px;
+    }
+
+    .col-4 {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .card {
+        min-height: 0;
+        height: auto;
+
+        padding-bottom: 15px;
+    }
+
+    .card img {
+        width: 100%;
+        height: 220px;
+
+        object-fit: cover;
+    }
+
+    .card h1 {
+        font-size: 2.2rem;
+
+        margin: 15px;
+    }
+
+    .card p {
+        font-size: 1.4rem;
+
+        line-height: 1.5;
+
+        margin: 0 15px 15px;
+    }
+
+    .card .d-flex {
+        margin-top: 10px;
+    }
+
+    .card a {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .menu .list-itens a {
+        font-size: 0.9rem;
+        padding: 6px;
+    }
+
+    .primary-text {
+        font-size: 2.8rem;
+    }
+
+    .second-text {
+        font-size: 1.3rem;
+    }
+
+    .primary-text2,
+    .primary-text3 {
+        font-size: 2.7rem;
+    }
+
+    .descricao {
+        font-size: 1.5rem;
+    }
+
+    .card img {
+        height: 200px;
+    }
+
+    .card p {
+        font-size: 1.3rem;
+    }
 }
