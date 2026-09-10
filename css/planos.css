@@ -1,0 +1,323 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CONFIGURAÇÕES GERAIS */
+html {
+    font-size: 62.5%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+}
+
+
+/* CABEÇALHO */
+header {
+    width: 100%;
+    height: 90px;
+    background-color: rgb(15, 15, 15);
+}
+
+.menu {
+    width: 100%;
+    height: 100%;
+
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 0.4rem;
+    color: white;
+}
+
+.list-itens {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+
+.menu .list-itens a{
+    text-decoration: none;
+    color: white;
+    padding: 1.5rem;
+    transition: 2ms ease-in;
+    position: relative;
+}
+
+.menu .list-itens a:before{
+   content: ' ';
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
+   width: 0px;
+   height: 1px;
+   background-color: blue;
+   transition: all 1.5s ease;
+}
+
+.menu .list-itens a:hover:before{
+    width: 100%;
+}
+
+.menu .list-itens a:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 4px;
+}
+
+.planos {
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px 5px;
+    height: auto;
+    display: flex;
+    align-items: center;justify-content: center;
+    
+    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/segundaImg.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.titulo-planos {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.titulo-planos h1 {
+    font-size: 5rem;
+    letter-spacing: 0.5rem;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.titulo-planos p {
+    font-size: 1.6rem;
+    color: #cccccc;
+}
+
+.planos-container {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+
+    align-items: start;
+}
+
+
+.card-plano {
+    position: relative;
+    background: rgba(254, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 25px 22px;
+
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s ease;
+}
+
+.card-plano:hover {
+    transform: translateY(-10px);
+
+    border-color: rgb(15, 60, 209);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.card-plano h2 {
+    font-size: 2.5rem;
+    margin-bottom: 18px;
+}
+
+.preco {
+    font-size: 3.5rem;
+    font-weight: bold;
+
+    margin-bottom: 30px;
+}
+
+.preco span {
+    font-size: 1.6rem;
+}
+
+.preco small {
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: #030303;
+}
+
+.card-plano ul {
+    text-align: left;
+
+    margin: 0 0 25px;
+    padding: 0;
+}
+
+.card-plano li {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(9, 1, 80, 0.897);
+    color: #030303;
+}
+
+
+.btn-plano {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border-radius: 6px;
+    background: rgb(15, 60, 209);
+    color: white;
+
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    transition: 0.3s ease;
+}
+
+.btn-plano:hover {
+    background: rgb(25, 75, 230);
+    transform: scale(1.03);
+}
+
+.btn-plano:focus-visible {
+    outline: 3px solid rgb(32, 212, 32);
+    outline-offset: 4px;
+}
+
+.card-plano.destaque {
+    border: 2px solid rgb(15, 60, 209);
+    box-shadow: 0 0 25px rgba(15, 60, 209, 0.2);
+}
+
+
+.mais-popular {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgb(15, 60, 209);
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    white-space: nowrap;
+    color: white;
+}
+
+.card-plano.anual {
+    border: 2px solid rgb(15, 60, 209);
+
+}
+
+.oferta {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 7px 15px;
+    border-radius: 20px;
+    background: rgb(15, 60, 209);
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+}
+
+
+.descricao-plano {
+    font-size: 1.5rem;
+
+    color: #190cc7;
+
+    margin-top: -15px;
+    margin-bottom: 20px;
+}
+
+
+.economia {
+    margin-bottom: 20px;
+
+    font-size: 1.4rem;
+    font-weight: bold;
+    
+    color: #190cc7;
+}
+
+footer {
+    width: 100%;
+    padding: 25px;
+    text-align: center;
+    background-color: rgb(10, 10, 10);
+    color: white;
+    font-size: 1.4rem;
+}
+
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+@media (max-width: 1200px) {
+    .planos-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .planos {
+        padding: 80px 20px;
+    }
+
+    .titulo-planos h1 {
+        font-size: 3rem;
+    }
+
+    .titulo-planos p {
+        font-size: 1.4rem;
+    }
+
+    .planos-container {
+        grid-template-columns: 1fr;
+    }
+
+    .card-plano {
+        padding: 30px 20px;
+    }
+
+}
+

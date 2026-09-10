@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* CONFIGURAÇÕES GERAIS */
+html {
+    font-size: 62.5%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+}
+
+
+/* CABEÇALHO */
+header {
+    width: 100%;
+    height: 90px;
+    background-color: rgb(15, 15, 15);
+}
+
+.menu {
+    width: 100%;
+    height: 100%;
+
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 0.4rem;
+    color: white;
+}
+
+.list-itens {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+}
+
+.menu .list-itens a{
+    text-decoration: none;
+    color: white;
+    padding: 1.5rem;
+    transition: 2ms ease-in;
+    position: relative;
+}
+
+.menu .list-itens a:before{
+   content: ' ';
+   position: absolute;
+   bottom: 0px;
+   left: 0px;
+   width: 0px;
+   height: 1px;
+   background-color: blue;
+   transition: all 1.5s ease;
+}
+
+.menu .list-itens a:hover:before{
+    width: 100%;
+}
+
+
+/* MAIN*/
+.login-main {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     
+    background:linear-gradient(rgba(17, 17, 17, 0.8), rgba(20, 20, 20, 1)), url(/img/principal.jpeg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+
+.login-section {
+    width: 450px;
+    padding: 40px;
+
+    border: 1px solid white;
+    border-radius: 20px;
+
+    background-color: rgb(235, 235, 255);
+    color: black;
+    text-align: center;
+}
+
+
+.login-section h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+
+.login-texto {
+    font-size: 1.6rem;
+    margin-bottom: 30px;
+}
+
+
+/* FORMULÁRIO */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+
+.campo label {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+}
+
+
+.campo input {
+    width: 100%;
+    height: 45px;
+    padding: 10px;
+
+    border: 2px solid rgb(3, 3, 3);
+    border-radius: 8px;
+
+    font-size: 1.6rem;
+    background-color: white;
+    color: black;
+}
+
+
+.campo input:focus {
+    outline: 3px solid rgb(33, 151, 3);
+    outline-offset: 2px;
+}
+
+.btn-login {
+    width: 100%;
+    height: 50px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background-color: rgb(49, 49, 227);
+    color: white;
+
+    font-size: 1.6rem;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.btn-login:focus {
+    outline: 3px solid rgb(33, 151, 3);
+    outline-offset: 3px;
+}
+
+.cadastro-texto {
+    font-size: 1.5rem;
+    margin-top: 20px;
+}
+
+
+.cadastro-texto a {
+    color: rgb(49, 49, 227);
+    font-weight: bold;
+}
+
+footer {
+    width: 100%;
+    padding: 25px;
+    text-align: center;
+    background-color: rgb(10, 10, 10);
+    color: white;
+    font-size: 1.4rem;
+}
+
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
