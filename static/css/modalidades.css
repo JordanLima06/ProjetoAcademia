@@ -1,0 +1,372 @@
+@import url('/static/css/root.css');
+
+/* ---------- Topo da página ---------- */
+.pagina-modalidades {
+    width: 100%;
+    color: var(--color-text);
+}
+
+.pagina-modalidades .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: none;
+    min-height: 380px;
+    margin: 0;
+    padding: 72px max(24px, calc((100% - 1200px) / 2));
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(8, 11, 18, 0.96) 0%,
+            rgba(8, 11, 18, 0.78) 48%,
+            rgba(8, 11, 18, 0.42) 100%
+        ),
+        linear-gradient(
+            0deg,
+            var(--color-dark) 0%,
+            transparent 45%
+        ),
+        url("/static/assets/crossfit.jpeg") center 40% / cover no-repeat;
+
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pagina-modalidades .hero-conteudo {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pagina-modalidades .eyebrow {
+    margin: 0 0 16px;
+    color: var(--color-primary-light);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.pagina-modalidades .hero h1 {
+    max-width: 850px;
+    margin: 0 0 18px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    text-transform: uppercase;
+    overflow-wrap: break-word;
+}
+
+.pagina-modalidades .intro {
+    max-width: 600px;
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* ---------- Faixa e título ---------- */
+
+.pagina-modalidades .faixa {
+    background: var(--color-dark-blue);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pagina-modalidades .modalidades {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 24px 40px;
+}
+
+.pagina-modalidades .secao-topo {
+    margin-bottom: 32px;
+}
+
+.pagina-modalidades .secao-topo h2 {
+    margin: 0 0 10px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.pagina-modalidades .secao-topo p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.pagina-modalidades .mensagem {
+    margin: 0 0 24px;
+    padding: 16px;
+    background: var(--color-card);
+    color: var(--color-text);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+}
+
+/* ---------- Grade de modalidades ---------- */
+
+.pagina-modalidades .grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.pagina-modalidades .card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--color-card);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    transition:
+        border-color var(--transition-default),
+        transform var(--transition-default);
+}
+
+.pagina-modalidades .card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+}
+
+/* Imagens preenchendo o card */
+
+.pagina-modalidades .card-imagem {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    background: var(--color-surface);
+}
+
+.pagina-modalidades .card-corpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+}
+
+.pagina-modalidades .numero {
+    color: var(--color-primary-light);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.pagina-modalidades .card h3 {
+    margin: 12px 0;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: 1.35rem;
+    font-weight: 800;
+    overflow-wrap: break-word;
+}
+
+.pagina-modalidades .card-texto {
+    flex: 1;
+    margin: 0 0 24px;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.pagina-modalidades .card-rodape {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    width: 100%;
+    margin-top: auto;
+}
+
+.pagina-modalidades .tag {
+    align-self: flex-start;
+    display: inline-block;
+    padding: 6px 12px;
+    color: var(--color-primary-light);
+    background: var(--color-dark-blue);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+/* ---------- Botão "Saiba mais" ---------- */
+
+.pagina-modalidades .btn-secundario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 44px;
+    min-height: 48px;
+    padding: 12px 16px;
+    color: var(--color-white);
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background-color var(--transition-default),
+        color var(--transition-default);
+}
+
+.pagina-modalidades .btn-secundario:hover {
+    color: var(--color-white);
+    background: var(--color-primary);
+}
+
+.pagina-modalidades .btn-secundario:focus-visible,
+.pagina-modalidades .botao:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 4px;
+}
+
+/* ---------- Chamada para cadastro ---------- */
+
+.pagina-modalidades .cta {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+}
+
+.pagina-modalidades .cta-interno {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 32px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.pagina-modalidades .cta-interno h2 {
+    margin: 0 0 10px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+}
+
+.pagina-modalidades .cta-interno p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.pagina-modalidades .botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 48px;
+    padding: 12px 22px;
+    color: var(--color-white);
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background-color var(--transition-default),
+        transform var(--transition-default);
+}
+
+.pagina-modalidades .botao:hover {
+    color: var(--color-white);
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+/* ---------- Responsividade: tablets ---------- */
+
+@media (max-width: 900px) {
+    .pagina-modalidades .grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pagina-modalidades .cta-interno {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* ---------- Responsividade: celulares ---------- */
+
+@media (max-width: 600px) {
+    .pagina-modalidades .hero {
+        min-height: 320px;
+        padding: 56px 20px;
+        background-position: center, center, 58% center;
+    }
+
+    .pagina-modalidades .hero h1 {
+        font-size: clamp(2.3rem, 10vw, 3.2rem);
+    }
+
+    .pagina-modalidades .intro {
+        font-size: 1rem;
+    }
+
+    .pagina-modalidades .modalidades {
+        padding: 40px 20px 24px;
+    }
+
+    .pagina-modalidades .grade {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-modalidades .card-imagem {
+        height: 230px;
+    }
+
+    .pagina-modalidades .card-corpo {
+        padding: 20px;
+    }
+
+    .pagina-modalidades .cta {
+        padding: 24px 20px 40px;
+    }
+
+    .pagina-modalidades .cta-interno {
+        padding: 24px;
+    }
+
+    .pagina-modalidades .cta-interno .botao {
+        width: 100%;
+    }
+}
+
+/* ---------- Acessibilidade ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-modalidades .card,
+    .pagina-modalidades .botao,
+    .pagina-modalidades .btn-secundario {
+        transition: none;
+    }
+
+    .pagina-modalidades .card:hover {
+        transform: none;
+    }
+}

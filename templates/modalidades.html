@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+
+{% block title %} Modalidades {% endblock %}
+
+{% block content %}
+<div class="pagina-modalidades">
+  <section class="hero" aria-labelledby="titulo-principal">
+    <div class="hero-conteudo">
+      <p class="eyebrow">Treine do seu jeito</p>
+      <h1 id="titulo-principal">Nossas modalidades</h1>
+      <p class="intro">
+        Encontre a modalidade que combina com você.
+      </p>
+    </div>
+  </section>
+
+
+  <section class="faixa" aria-labelledby="titulo-modalidades">
+    <div class="modalidades">
+      <div class="secao-topo">
+        <p>Opções para diferentes objetivos e níveis de experiência.</p>
+      </div>
+      <div class="grade" id="lista-modalidades">
+        {% for item in modalidades %}
+        <article class="card">
+          <img class="card-imagem" src="{{ url_for('static', filename=item.imagem) }}" alt="Foto de {{ item.nome }}"
+            loading="lazy">
+
+          <div class="card-corpo">
+            <span class="numero">{{ "%02d" | format(loop.index) }}</span>
+
+            <h3>{{ item.nome }}</h3>
+
+            <p class="card-texto">{{ item.descricao }}</p>
+
+            <div class="card-rodape">
+              <span class="tag">{{ item.tag }}</span>
+
+              <a class="btn-secundario" href="{{ url_for('detalhe_modalidade', slug=item.slug) }}">
+                Saiba mais
+              </a>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <section class="cta" aria-labelledby="titulo-cta">
+        <div class="cta-interno">
+          <div>
+            <h2 id="titulo-cta">Vamos começar?</h2>
+            <p>Faça seu cadastro e dê o primeiro passo na sua jornada.</p>
+          </div>
+          <a class="botao" href="cadastro.html">Quero me cadastrar</a>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
+{% endblock %}

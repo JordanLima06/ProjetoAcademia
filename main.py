@@ -28,31 +28,36 @@ modalidades = [
         "slug": "musculacao",
         "nome": "Musculação",
         "descricao": "Treine com os melhores equipamentos e instrutores para alcançar seus objetivos de forma eficiente.",
-        "imagem": "assets/musculacao.jpeg"
+        "imagem": "assets/musculacao.jpeg",
+        "tag": "Força e Hipertrófia"
     },
     {
         "slug": "boxe",
         "nome": "Boxe",
         "descricao": "Aprenda técnicas de boxe com profissionais experientes e melhore sua resistência e força.",
-        "imagem": "assets/boxe.jpeg"
+        "imagem": "assets/boxe.jpeg",
+        "tag": "Agilidade e Resistência"
     },
     {
         "slug": "jiu-jitsu",
         "nome": "Jiu-Jitsu",
         "descricao": "Desenvolva habilidades de defesa pessoal e condicionamento físico com aulas de Jiu-Jitsu.",
-        "imagem": "assets/jiujitsu.jpeg"
+        "imagem": "assets/jiujitsu.jpeg",
+        "tag": "Estratégia e controle"
     },
     {
         "slug": "funcional",
         "nome": "Funcional",
         "descricao": "Aulas dinâmicas que combinam força, resistência e flexibilidade para um treino completo.",
-        "imagem": "assets/funcional.jpeg"
+        "imagem": "assets/funcional.jpeg",
+        "tag": "Mobilidade e equilíbrio"
     },
     {
         "slug": "crossfit",
         "nome": "CrossFit",
         "descricao": "Treino de alta intensidade que combina exercícios funcionais e movimentos variados.",
-        "imagem": "assets/crossfit.jpeg"
+        "imagem": "assets/crossfit.jpeg",
+        "tag": "Força e resistência"
     }
 ]
 
@@ -85,5 +90,13 @@ def detalhe_modalidade(slug):
         categoria="Modalidades"
     )
 
+@app.get("/modalidades")
+def modalidade():
+    return render_template(
+        "modalidades.html",
+        modalidades=modalidades
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)
+
