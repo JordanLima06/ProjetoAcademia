@@ -1,0 +1,337 @@
+@import url('/static/css/root.css');
+
+.pagina-planos {
+    width: 100%;
+    color: var(--color-text);
+}
+
+/* Hero */
+.pagina-planos .hero-planos {
+    display: flex;
+    align-items: center;
+    min-height: 340px;
+    padding: 64px 24px;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(8, 11, 18, 0.97),
+            rgba(8, 11, 18, 0.72)
+        ),
+        linear-gradient(
+            135deg,
+            var(--color-dark),
+            var(--color-dark-blue)
+        );
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pagina-planos .hero-planos-conteudo {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pagina-planos .eyebrow-planos {
+    margin: 0 0 16px;
+    color: var(--color-primary-light);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.pagina-planos .hero-planos h1 {
+    max-width: 850px;
+    margin: 0 0 18px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    text-transform: uppercase;
+}
+
+.pagina-planos .intro-planos {
+    max-width: 650px;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+/* Seção de planos */
+.pagina-planos .faixa-planos {
+    background: var(--color-dark-blue);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pagina-planos .conteudo-planos {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 24px 64px;
+}
+
+.pagina-planos .secao-planos {
+    margin-bottom: 32px;
+}
+
+.pagina-planos .secao-planos h2 {
+    margin: 0 0 10px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.pagina-planos .secao-planos p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+/* Grade */
+.pagina-planos .grade-planos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* Tablets e telas médias */
+@media (max-width: 1100px) {
+    .pagina-planos .grade-planos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+    .pagina-planos .grade-planos {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pagina-planos .card-plano {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    transition:
+        transform var(--transition-default),
+        border-color var(--transition-default);
+}
+
+.pagina-planos .card-plano:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-4px);
+}
+
+.pagina-planos .card-plano-topo {
+    padding: 28px 24px 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pagina-planos .numero-plano {
+    color: var(--color-primary-light);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.pagina-planos .card-plano h3 {
+    margin: 16px 0;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.pagina-planos .preco-plano {
+    margin: 0;
+    color: var(--color-primary-light);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.pagina-planos .preco-plano span {
+    font-size: 1rem;
+}
+
+.pagina-planos .preco-plano small {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Benefícios */
+
+.pagina-planos .card-plano-corpo {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.pagina-planos .beneficios-plano {
+    display: grid;
+    gap: 16px;
+    margin: 0 0 28px;
+    padding: 0;
+    list-style: none;
+}
+
+.pagina-planos .beneficios-plano li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.pagina-planos .check-plano {
+    flex-shrink: 0;
+    color: var(--color-primary-light);
+    font-weight: 800;
+}
+
+/* Botões */
+
+.pagina-planos .botao-plano {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: auto;
+    padding: 12px 18px;
+    color: var(--color-white);
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background-color var(--transition-default),
+        border-color var(--transition-default);
+}
+
+.pagina-planos .botao-plano:hover {
+    color: var(--color-white);
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+.pagina-planos .botao-plano:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 4px;
+}
+
+/* Chamada final */
+
+.pagina-planos .cta-planos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    margin-top: 48px;
+    padding: 32px;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.pagina-planos .cta-planos h2 {
+    margin: 0 0 10px;
+    color: var(--color-white);
+    font-family: var(--font-main);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.pagina-planos .cta-planos p {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.pagina-planos .botao-cta-plano {
+    width: auto;
+    flex-shrink: 0;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+    .pagina-planos .grade-planos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pagina-planos .cta-planos {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagina-planos .botao-cta-plano {
+        width: 100%;
+    }
+}
+
+/* Celular */
+
+@media (max-width: 600px) {
+    .pagina-planos .hero-planos {
+        min-height: 300px;
+        padding: 48px 20px;
+    }
+
+    .pagina-planos .hero-planos h1 {
+        font-size: clamp(2.3rem, 10vw, 3.2rem);
+    }
+
+    .pagina-planos .intro-planos {
+        font-size: 1rem;
+    }
+
+    .pagina-planos .conteudo-planos {
+        padding: 40px 20px;
+    }
+
+    .pagina-planos .grade-planos {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-planos .card-plano-topo,
+    .pagina-planos .card-plano-corpo {
+        padding: 22px;
+    }
+
+    .pagina-planos .cta-planos {
+        padding: 24px;
+    }
+}
+
+/* Acessibilidade */
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-planos .card-plano,
+    .pagina-planos .botao-plano {
+        transition: none;
+    }
+
+    .pagina-planos .card-plano:hover {
+        transform: none;
+    }
+}

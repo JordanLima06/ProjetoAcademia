@@ -1,121 +1,88 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/planos.css">
-    <title>Planos</title>
-</head>
-<body>
-    <header>
-        <div class="menu">
-            <p class="logo">ACADEMIA</p>
-            <nav class="header-menu">
-                <ul class="list-itens">
-                     <li><a href="index.html">HOME</a></li>
-                    <li><a href="planos.html">PLANOS</a></li>
-                    <li><a href="#">CADASTRO</a></li>
-                    <li><a href="login.html">SOU ALUNO</a></li>
-                    <li><a href="#">SOBRE NÓS</a></li>
-                </ul>
-            </nav>
+{% extends "index.html" %}
+
+{% block title %}Planos | FightAcademy{% endblock %}
+
+{% block content %}
+<div class="pagina-planos">
+
+    <section class="hero-planos" aria-labelledby="titulo-planos">
+        <div class="hero-planos-conteudo">
+            <p class="eyebrow-planos">Seu próximo nível começa aqui</p>
+
+            <h1 id="titulo-planos">Escolha seu plano.</h1>
+
+            <p class="intro-planos">
+                Encontre a opção ideal para seus objetivos e evolua
+                no seu ritmo com a FightAcademy.
+            </p>
         </div>
-    </header>
-    <main class="planos" id="planos">
-        <div class="container">
-            <div class="titulo-planos">
-                <h1>PLANOS</h1>
-                <p>Escolha o plano ideal para alcançar seus objetivos.</p>
+    </section>
+
+    <section class="faixa-planos" aria-labelledby="lista-planos">
+        <div class="conteudo-planos">
+
+            <header class="secao-planos">
+                <h2 id="lista-planos">Nossos planos</h2>
+                <p>Compare os benefícios e encontre o plano ideal para você.</p>
+            </header>
+
+            <div class="grade-planos">
+                {% for plano in planos %}
+                <article class="card-plano">
+
+                    <div class="card-plano-topo">
+                        <span class="numero-plano">
+                            PLANO {{ "%02d" | format(loop.index) }}
+                        </span>
+
+                        <h3>{{ plano.nome }}</h3>
+
+                        <p class="preco-plano">
+                            {% if plano.slug == "anual" %}
+                            <span>R$</span> 1.399,90
+                            <small>/ano</small>
+                            {% else %}
+                            <span>R$</span>
+                            {{ "%.2f"|format(plano.preco)|replace(".", ",") }}
+                            <small>/mês</small>
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="card-plano-corpo">
+                        {% if plano.beneficios %}
+                        <ul class="beneficios-plano">
+                            {% for beneficio in plano.beneficios %}
+                            <li>
+                                <span class="check-plano" aria-hidden="true">✓</span>
+                                <span>{{ beneficio }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+
+                        <a class="botao-plano" href="{{ url_for('listar_planos') }}">
+                            Quero este plano
+                        </a>
+                    </div>
+
+                </article>
+                {% endfor %}
             </div>
 
-            <div class="planos-container">
-                <article class="card-plano">
-                    <h2>ESSENCIAL</h2>
-                    <div class="preco">
-                        <span>R$ 79,90</span>
-                        <small>/mês</small>
-                    </div>
-                    <ul>
-                        <li>Acesso à musculação</li>
-                        <li>Treino personalizado</li>
-                        <li>Avaliação física</li>
-                        <li>Área de cardio</li>
-                        <li>Acesso em horário comercial</li>
-                    </ul>
-                    <a href="#" class="btn-plano">ASSINAR AGORA</a>
-                </article>
-                    
-                <article class="card-plano destaque">
-                    <span class="mais-popular">MAIS POPULAR</span>
-                    <h2>PERFORMANCE</h2>
-                    <div class="preco">
-                        <span>R$ 109,90</span>
-                        <small>/mês</small>
-                    </div>
-                    <ul>
-                        <li>Tudo do plano Essencial</li>
-                        <li>Aulas de Boxe</li>
-                        <li>Aulas de Jiu-Jitsu</li>
-                        <li>Aulas de Funcional</li>
-                        <li>Avaliação física mensal</li>
-                        <li>Acesso livre à academia</li>
-                    </ul>
-                    <a href="#" class="btn-plano">ASSINAR AGORA</a>
-                </article>
+            <section class="cta-planos" aria-labelledby="titulo-cta-planos">
+                <div>
+                    <h2 id="titulo-cta-planos">Pronto para começar?</h2>
+                    <p>Escolha seu plano e dê o próximo passo na sua jornada.</p>
+                </div>
 
-                <article class="card-plano">
-                    <h2>PREMIUM</h2>
-                    <div class="preco">
-                        <span>R$ 139,90</span>
-                        <small>/mês</small>
-                    </div>
-                    <ul>
-                        <li>Tudo do plano Performance</li>
-                        <li>Todas as modalidades</li>
-                        <li>Musculação</li>
-                        <li>Boxe</li>
-                        <li>Jiu-Jitsu</li>
-                        <li>Funcional</li>
-                        <li>CrossFit</li>
-                        <li>Treino personalizado</li>
-                        <li>Acompanhamento de evolução</li>
-                    </ul>
-                    <a href="#" class="btn-plano">ASSINAR AGORA</a>
-                </article>
+                <a class="botao-plano botao-cta-plano" href="{{ url_for('listar_planos') }}">
+                    Fazer cadastro
+                </a>
+            </section>
 
-                <article class="card-plano anual">
-                    <span class="oferta">MELHOR CUSTO-BENEFÍCIO</span>
-                    <h2>ANUAL</h2>
-                    <div class="preco">
-                        <span>R$ 1.399,90</span>
-                        <small>/ano</small>
-                    </div>
-                    <p class="descricao-plano">Treine o ano inteiro pagando menos.</p>
-                    <ul>
-                        <li>Acesso livre à academia</li>
-                        <li>Todas as modalidades</li>
-                        <li>Musculação</li>
-                        <li>Jiu-Jitsu</li>
-                        <li>Boxe</li>
-                        <li>Funcional</li>
-                        <li>CrossFit</li>
-                        <li>Avaliação física trimestral</li>
-                        <li>Treino personalizado</li>
-                        <li>Acompanhamento de evolução</li>
-                        <li>1 mês de bônus</li>
-                        <li>Sem taxa de matrícula</li>
-                    </ul>
-                    <div class="economia">
-                        ECONOMIZE R$ 278,90
-                    </div>
-                    <a href="#" class="btn-plano">COMEÇAR AGORA</a>
-                </article>
-            </div>
         </div>
-    </main>
-    <footer>
-        <p class="footer-logo">ACADEMIA</p>
-        <p>Projeto acadêmico - 2026</p>
-    </footer>
-</body>
-</html>
+    </section>
+
+</div>
+{% endblock %}

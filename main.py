@@ -20,6 +20,12 @@ planos = [
         "nome": "Premium",
         "preco": 139.90,
         "beneficios": ["Todos os benefícios do plano Perfomance", "Treino personalizado", "Acompanhamento de evolução", "Acesso a todas modalidades"]
+    },
+    {
+        "slug": "anual",
+        "nome": "Anual",
+        "preco": 1399.90,
+        "beneficios": ["Tudo do plano Premium", "Um mês bônus", "Consultoria nutricional", "Sem taxa de matrícula"]
     }
 ]
 
