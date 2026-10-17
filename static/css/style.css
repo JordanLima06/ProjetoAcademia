@@ -1,0 +1,851 @@
+@import url('/static/css/root.css');
+@import url('/static/css/navbar.css');
+@import url('/static/css/footer.css');
+
+/* ========================================
+  RESET E CONFIGURAÇÕES GERAIS
+======================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  margin: 0;
+  background: var(--color-dark);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+section[id] {
+  scroll-margin-top: 85px;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-primary-light);
+  outline-offset: 4px;
+}
+
+
+/* ========================================
+   BOTÕES GERAIS
+======================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 11px 22px;
+
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  transition:
+    background-color var(--transition-default),
+    border-color var(--transition-default),
+    color var(--transition-default),
+    transform var(--transition-default);
+}
+
+.btn-accent {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-accent:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-white);
+}
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: var(--color-white);
+}
+
+.btn-outline-light:hover {
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+/* ========================================
+   TÍTULOS E SEÇÕES
+======================================== */
+.section-padding {
+  padding: 100px 0;
+}
+
+.section-surface {
+  background: var(--color-dark-blue);
+}
+
+.section-heading {
+  max-width: 800px;
+  margin: 0 auto 48px;
+}
+
+.eyebrow {
+  margin-bottom: 12px;
+  color: var(--color-primary-light);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin-bottom: 18px;
+  color: var(--color-white);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.text-secondary {
+  color: var(--color-text-muted) !important;
+}
+
+
+/* ========================================
+   6. HERO / PÁGINA INICIAL
+======================================== */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  min-height: 90vh;
+  padding: 120px 0 90px;
+
+  overflow: hidden;
+  background: var(--color-dark-blue);
+}
+
+.hero-image,
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  background:
+    linear-gradient(90deg,
+      rgba(8, 11, 18, 0.94),
+      rgba(8, 11, 18, 0.38)),
+    linear-gradient(0deg,
+      var(--color-dark),
+      transparent 45%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.7s ease both;
+}
+
+.hero h1 {
+  max-width: 950px;
+  margin: 16px 0 28px;
+
+  color: var(--color-white);
+  font-size: clamp(2.5rem, 6vw, 5.3rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  text-transform: uppercase;
+}
+
+.hero h1 span {
+  color: var(--color-primary-light);
+}
+
+.hero p:not(.eyebrow) {
+  max-width: 650px;
+  color: #D5DCE8;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+
+/* ========================================
+   SOBRE
+======================================== */
+.about-section {
+  background: var(--color-dark);
+}
+
+.about-image {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.about-content p {
+  color: var(--color-text-muted);
+}
+
+
+/* ========================================
+   8. MODALIDADES
+======================================== */
+
+#modalidades {
+  background: var(--color-dark-blue);
+}
+
+#modalidades .row {
+  align-items: stretch;
+}
+
+#modalidades .row>div {
+  min-width: 0;
+}
+
+#modalidades .card {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background: var(--color-card);
+  color: var(--color-text);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    border-color var(--transition-default),
+    transform var(--transition-default);
+}
+
+#modalidades .card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+}
+
+#modalidades .card-img-top {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+#modalidades .card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+
+  padding: 24px;
+}
+
+#modalidades .card-title {
+  margin-bottom: 12px;
+  color: var(--color-white);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+#modalidades .card-text {
+  flex: 1;
+  margin-bottom: 22px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+#modalidades .card .btn {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ========================================
+  PLANOS
+======================================== */
+.plans-section {
+  background:
+    radial-gradient(ellipse at bottom,
+      rgba(23, 101, 237, 0.12),
+      transparent 65%),
+    var(--color-dark);
+  color: var(--color-text);
+}
+
+.plans-section .section-heading {
+  margin-bottom: 48px;
+}
+
+.plans-section .eyebrow {
+  color: var(--color-primary-light);
+}
+
+.plans-subtitle {
+  margin-top: 16px;
+  color: var(--color-text-muted);
+}
+
+#planos .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+#planos .row>div {
+  min-width: 0;
+}
+
+.plans-section .plan-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  padding: 32px 28px 28px;
+
+  background: linear-gradient(145deg,
+      #172238,
+      #101725);
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-card);
+
+  transition:
+    border-color var(--transition-default),
+    transform var(--transition-default),
+    box-shadow var(--transition-default);
+}
+
+.plans-section .plan-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+}
+
+/* Plano em destaque */
+.plans-section .plan-highlight {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-blue);
+}
+
+.plans-section .plan-highlight:hover {
+  box-shadow: 0 0 32px rgba(23, 101, 237, 0.25);
+}
+
+/* Etiqueta */
+.plans-section .plan-tag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+
+  transform: translate(-50%, -50%);
+
+  padding: 7px 18px;
+
+  background: var(--color-primary);
+  color: var(--color-white);
+
+  border-radius: 30px;
+  white-space: nowrap;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Título */
+.plans-section .plan-card h3 {
+  margin: 0 0 18px;
+
+  color: var(--color-white);
+
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* Preço */
+.plans-section .plan-price {
+  margin-bottom: 26px;
+
+  color: var(--color-white);
+
+  font-size: clamp(1.7rem, 2.1vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.plans-section .plan-price span {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* Benefícios */
+.plans-section .plan-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  padding: 0;
+  margin: 0 0 32px;
+
+  list-style: none;
+}
+
+.plans-section .plan-benefits li {
+  position: relative;
+  padding-left: 26px;
+
+  color: #DCE3EF;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.plans-section .plan-benefits li::before {
+  content: "✓";
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  color: var(--color-primary-light);
+  font-weight: 800;
+}
+
+/* Botão de cada plano */
+.plans-section .plan-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 48px;
+
+  margin-top: auto;
+  padding: 12px 16px;
+
+  background: transparent;
+  border: 1px solid #40506A;
+  border-radius: var(--radius-sm);
+
+  color: var(--color-white);
+
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+
+  transition:
+    background-color var(--transition-default),
+    border-color var(--transition-default);
+}
+
+.plans-section .plan-button:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary-light);
+  color: var(--color-white);
+}
+
+/* Botão do plano destacado */
+.plans-section .plan-button-primary,
+.plans-section .plan-all-button {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-white);
+}
+
+.plans-section .plan-button-primary:hover,
+.plans-section .plan-all-button:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-white);
+}
+
+/* Ver todos os planos */
+.plans-section .plan-all-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  padding: 13px 26px;
+
+  border-radius: var(--radius-sm);
+
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+
+  transition:
+    background-color var(--transition-default),
+    transform var(--transition-default);
+}
+
+.plans-section .plan-all-button:hover {
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   CHAMADA PARA AÇÃO
+======================================== */
+
+.cta-section {
+  position: relative;
+  overflow: hidden;
+
+  padding: 90px 0;
+
+  background: var(--gradient-primary);
+  color: var(--color-white);
+}
+
+.cta-section h2 {
+  max-width: 900px;
+  margin: 0 auto;
+
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.cta-section p {
+  max-width: 650px;
+  margin: 20px auto 0;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.cta-section .btn {
+  margin-top: 30px;
+  background: var(--color-white);
+  border-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+.cta-section .btn:hover {
+  background: #E5EDFF;
+  border-color: #E5EDFF;
+}
+
+/* ========================================
+   FORMULÁRIOS
+======================================== */
+
+.form-label {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.form-control,
+.form-select {
+  min-height: 46px;
+
+  background-color: var(--color-dark-blue);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+
+  color: var(--color-text);
+}
+
+.form-control::placeholder {
+  color: #8794AA;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 0 0 0.2rem rgba(23, 101, 237, 0.2);
+}
+
+.form-select option {
+  background: var(--color-dark-blue);
+  color: var(--color-white);
+}
+
+
+/* ========================================
+   ANIMAÇÕES
+======================================== */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ========================================
+   TABLETS
+======================================== */
+
+@media (max-width: 991.98px) {
+  .section-padding {
+    padding: 80px 0;
+  }
+
+  .hero {
+    min-height: 80vh;
+    padding: 110px 0 75px;
+  }
+
+  .navbar-collapse {
+    padding: 16px 0;
+  }
+
+  .plans-section .plan-card {
+    padding: 28px 22px 24px;
+  }
+
+  .plans-section .plan-price {
+    font-size: 1.8rem;
+  }
+}
+
+
+/* ========================================
+   CELULARES
+======================================== */
+
+@media (max-width: 575.98px) {
+  html {
+    scroll-padding-top: 75px;
+  }
+
+  section[id] {
+    scroll-margin-top: 75px;
+  }
+
+  .section-padding {
+    padding: 65px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 34px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    letter-spacing: -0.5px;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+  }
+
+  .hero {
+    min-height: 78vh;
+    padding: 100px 0 65px;
+  }
+
+  .hero-overlay {
+    background:
+      linear-gradient(90deg,
+        rgba(8, 11, 18, 0.9),
+        rgba(8, 11, 18, 0.55)),
+      linear-gradient(0deg,
+        var(--color-dark),
+        transparent 50%);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.3rem, 10vw, 3.5rem);
+    letter-spacing: -0.8px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  #modalidades .card-img-top {
+    height: auto;
+  }
+
+  #modalidades .card-body {
+    padding: 22px;
+  }
+
+  .plans-section .plan-card {
+    padding: 28px 22px 24px;
+  }
+
+  .plans-section .plan-price {
+    font-size: 1.9rem;
+  }
+
+  .cta-section {
+    padding: 65px 0;
+  }
+
+  .site-footer {
+    padding: 32px 0;
+  }
+}
+
+
+/* ========================================
+   ACESSIBILIDADE: MENOS MOVIMENTO
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-content {
+    animation: none;
+  }
+
+  #modalidades .card:hover,
+  .plans-section .plan-card:hover,
+  .plans-section .plan-all-button:hover {
+    transform: none;
+  }
+}
+
+
+.detalhe-conteudo {
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 32px;
+  background: var(--color-card, #172238);
+  color: var(--color-text, #F5F7FA);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: 18px;
+}
+
+.detalhe-conteudo h1 {
+  margin: 16px 0;
+  font-weight: 800;
+}
+
+.detalhe-conteudo h2 {
+  margin-top: 28px;
+  font-size: 1.3rem;
+}
+
+.detalhe-conteudo li {
+  margin-bottom: 10px;
+}
+
+.detalhe-conteudo .preco {
+  color: var(--color-primary-light, #78A9FF);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.detalhe-conteudo .etiqueta {
+  color: var(--color-primary-light, #78A9FF);
+  font-weight: 700;
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--color-text-muted, #A7B2C5);
+}
+
+.breadcrumb a {
+  color: var(--color-primary-light, #78A9FF);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+  .detalhe-conteudo {
+    padding: 22px;
+    margin: 24px auto;
+  }
+
+  .detalhe-conteudo .preco {
+    font-size: 1.7rem;
+  }
+}
