@@ -103,6 +103,10 @@ def modalidade():
         modalidades=modalidades
     )
 
+@app.get("/login")
+def login():
+    return render_template("login.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
 
