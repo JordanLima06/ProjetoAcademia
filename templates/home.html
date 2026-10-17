@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+
+{% block title %}ACADEMIA — Home {% endblock %}
+
+{% block content %}
+
+<section class="hero d-flex align-items-center" id="inicio">
+    <img class="hero-image" src="{{ url_for('static', filename='assets/hero.jpeg') }}" alt="Imagem de capa da academia"
+        fetchpriority="high">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <p class="eyebrow">Inscreva-se agora e mude de vida</p>
+
+        <h1>
+            Malhar não fica mais fácil,
+            <span>você fica melhor!</span>
+        </h1>
+
+        <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+            <a href="{{ url_for('static', filename='aula-experimental.html') }}" class="btn btn-outline-light btn-lg">
+                Agendar aula experimental
+            </a>
+            <a href="{{ url_for('static', filename='cadastro.html') }}" class="btn btn-accent btn-lg">
+                Quero me matricular
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" id="sobre">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='assets/gym.jpeg') }}" class="img-fluid about-image"
+                    alt="Área de treinamento da academia" loading="lazy">
+            </div>
+
+            <div class="col-lg-6">
+                <p class="eyebrow">Quem somos</p>
+                <h2 class="section-title">Conheça nossa história</h2>
+
+                <p class="text-secondary">
+                    A Academia nasceu de uma ideia simples: transformar a prática
+                    de exercícios em uma experiência capaz de mudar não apenas
+                    o corpo, mas também a mente e a rotina das pessoas.
+                </p>
+
+                <p class="text-secondary">
+                    Mais do que oferecer equipamentos e treinos, nossa proposta
+                    é construir um ambiente acolhedor, onde iniciantes e pessoas
+                    experientes encontrem incentivo, acompanhamento e determinação
+                    para alcançar seus objetivos.
+                </p>
+
+                <a href="{{ url_for('static', filename='sobre.html') }}" class="btn btn-outline-light mt-3">
+                    Saiba mais sobre nós
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section-padding section-surface" id="modalidades">
+    <div class="container">
+        <div class="section-heading text-center">
+            <p class="eyebrow">Treine do seu jeito</p>
+            <h2 class="section-title">Nossas modalidades</h2>
+        </div>
+
+        <div class="row g-4">
+            {% for modalidade in modalidades %}
+            <div class="col-12 col-sm-6 col-lg-4">
+                <article class="card h-100">
+                    <img src="{{ url_for('static', filename=modalidade.imagem) }}" class="card-img-top"
+                        alt="Treino de {{ modalidade.nome }}" loading="lazy"
+                    >
+
+                    <div class="card-body d-flex flex-column">
+                        <h3 class="card-title">
+                            {{ modalidade.nome }}
+                        </h3>
+
+                        <p class="card-text">
+                            {{ modalidade.descricao }}
+                        </p>
+
+                        <a href="{{ url_for('detalhe_modalidade', slug=modalidade.slug) }}"
+                            class="btn btn-accent mt-auto">
+                            Ver detalhes
+                        </a>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section class="section-padding plans-section" id="planos">
+    <div class="container">
+        <div class="section-heading text-center">
+            <p class="eyebrow">Nossos planos</p>
+            <h2 class="section-title">Escolha seu plano</h2>
+        </div>
+
+        <div class="row g-4">
+            {% for plano in planos %}
+            <div class="col-12 col-md-4">
+                <article class="plan-card">
+                    <h3>{{ plano.nome }}</h3>
+
+                    <p class="plan-price">
+                        R$ {{ "%.2f"|format(plano.preco) }}
+                        <span>/mês</span>
+                    </p>
+
+                    <ul class="plan-benefits">
+                        {% for beneficio in plano.beneficios %}
+                        <li>{{ beneficio }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <a href="{{ url_for('listar_planos') }}" class="plan-button">
+                        Ver planos
+                    </a>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('listar_planos') }}" class="plan-all-button">
+                Ver todos os planos
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="cta-section text-center">
+    <div class="container">
+        <h2>Seu próximo passo começa aqui.</h2>
+        <p>
+            Venha conhecer nossa estrutura, fale com nossos professores
+            e comece sua jornada de treinamento.
+        </p>
+        <a href="{{ url_for('static', filename='cadastro.html') }}" class="btn btn-light btn-lg mt-3">
+            Comece agora
+        </a>
+    </div>
+</section>
+{% endblock %}

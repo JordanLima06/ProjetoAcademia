@@ -72,7 +72,7 @@ header {
 }
 
 .menu .list-itens a:focus-visible {
-    outline: 3px solid white;
+    outline: 3px solid rgb(61, 27, 255);
     outline-offset: 4px;
 }
 

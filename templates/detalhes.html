@@ -1,0 +1,42 @@
+
+{% extends "index.html" %}
+
+{% block title %}{{ item.nome }} — FightAcademy{% endblock %}
+
+{% block content %}
+<section class="section-padding section-surface">
+    <div class="container">
+        <a href="{{ url_for('home') }}#modalidades"
+           class="btn btn-outline-light mb-4">
+            ← Voltar às modalidades
+        </a>
+
+        <div class="row align-items-center g-4">
+            <div class="col-12 col-md-6">
+                <img
+                    src="{{ url_for('static', filename=item.imagem) }}"
+                    alt="Treino de {{ item.nome }}"
+                    class="img-fluid rounded"
+                >
+            </div>
+
+            <div class="col-12 col-md-6">
+                <p class="eyebrow">Modalidade</p>
+
+                <h1 class="section-title">
+                    {{ item.nome }}
+                </h1>
+
+                <p class="card-text">
+                    {{ item.descricao }}
+                </p>
+
+                <a href="{{ url_for('listar_planos') }}"
+                   class="btn btn-accent mt-3">
+                    Conheça os planos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

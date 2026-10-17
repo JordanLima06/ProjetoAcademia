@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/css/login.css">
+  <script src="../js/login.js" defer></script>
+  <title>Área do Aluno</title>
+</head>
+
+<body>
+  <header>
+    <div class="menu">
+      <p class="logo"><span class="logo-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M7 8v8M4 10v4M17 8v8M20 10v4M7 12h10" />
+          </svg></span>ACADEMIA</p>
+      <nav aria-label="Navegação principal">
+        <ul class="list-itens">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="planos.html">Planos</a></li>
+          <li><a href="modalidades.html">Modalidades</a></li>
+          <li><a href="cadastro.html">Cadastro</a></li>
+          <li><a href="login.html" aria-current="page">Sou aluno</a></li>
+          <li><a href="sobre.html">Sobre nós</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo" class="login-main" tabindex="-1">
+    <section class="login-section" aria-labelledby="titulo">
+      <h1 id="titulo">Área do Aluno</h1>
+      <p class="login-texto">Entre com seu e-mail e senha.</p>
+
+      <form class="login-form" id="login-form" aria-describedby="aviso-demo">
+        <div class="campo">
+          <label for="email">E-mail (obrigatório)</label>
+          <input type="email" id="email" required autocomplete="username" inputmode="email" autocapitalize="none"
+            spellcheck="false" aria-describedby="email-erro">
+          <p class="erro" id="email-erro"></p>
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha (obrigatória)</label>
+          <div class="senha-controle">
+            <input type="password" id="senha" required autocomplete="current-password" aria-describedby="senha-erro">
+            <button type="button" id="mostrar-senha" class="btn-secundario" aria-controls="senha"
+              aria-pressed="false">Mostrar senha</button>
+          </div>
+          <p class="erro" id="senha-erro"></p>
+        </div>
+
+        <button type="button" class="link-botao" id="esqueci" aria-expanded="false" aria-controls="recuperacao">Esqueci
+          minha senha</button>
+        <button type="submit" class="btn-login" id="entrar">Entrar</button>
+      </form>
+
+      <p id="login-status" class="mensagem" role="status" aria-atomic="true"></p>
+      <div class="separador">ou</div>
+
+      <button type="button" id="google" class="btn-secundario google"><span class="google-icone" aria-hidden="true">G</span>Continuar com Google</button>
+      <p id="google-status" class="mensagem" role="status" aria-atomic="true"></p>
+      <p class="cadastro-texto">Ainda não possui cadastro? <a href="cadastro.html">Cadastre-se</a></p>
+
+      <section id="recuperacao" class="recuperacao" aria-labelledby="recuperar-titulo" hidden>
+        <h2 id="recuperar-titulo">Recuperar senha</h2>
+        <p id="recuperar-ajuda">Informe um e-mail fictício para testar. Esta demonstração não envia mensagens.</p>
+        <form id="recuperar-form">
+          <div class="campo">
+            <label for="recuperar-email">E-mail (obrigatório)</label>
+            <input type="email" id="recuperar-email" required autocomplete="email" inputmode="email"
+              aria-describedby="recuperar-ajuda recuperar-erro">
+            <p class="erro" id="recuperar-erro"></p>
+          </div>
+          <button class="btn-login" type="submit" id="recuperar-enviar">Solicitar recuperação</button>
+          <button class="link-botao" type="button" id="cancelar">Voltar ao login</button>
+        </form>
+        <p id="recuperar-status" class="mensagem" role="status" aria-atomic="true"></p>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <section aria-label="Academia">
+        <p class="footer-logo">ACADEMIA</p>
+        <p>Força, disciplina e evolução constante. Você fica melhor a cada treino.</p>
+      </section>
+      <section aria-labelledby="footer-nav">
+        <h2 id="footer-nav">Navegação</h2>
+        <nav aria-label="Navegação do rodapé">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="planos.html">Planos</a></li>
+            <li><a href="modalidades.html">Modalidades</a></li>
+            <li><a href="cadastro.html">Cadastro</a></li>
+            <li><a href="login.html" aria-current="page">Sou aluno</a></li>
+            <li><a href="sobre.html">Sobre nós</a></li>
+          </ul>
+        </nav>
+      </section>
+      <section aria-labelledby="footer-contato">
+        <h2 id="footer-contato">Contato</h2>
+        <p>Informações de contato em breve.</p>
+      </section>
+      <section aria-labelledby="footer-horarios">
+        <h2 id="footer-horarios">Horários</h2>
+        <p>Horários de funcionamento em breve.</p>
+      </section>
+    </div>
+    <p class="footer-bottom">© 2026 ACADEMIA · Projeto acadêmico</p>
+  </footer>
+</body>
+
+</html>

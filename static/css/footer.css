@@ -1,0 +1,27 @@
+/* ========================================
+  FOOTER
+======================================== */
+
+.site-footer {
+  padding: 40px 0;
+
+  background: #05070C;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.site-footer a {
+  color: var(--color-text-muted);
+  transition: color var(--transition-default);
+}
+
+.site-footer a:hover {
+  color: var(--color-primary-light);
+}
+
+.site-footer h3,
+.site-footer h4 {
+  color: var(--color-white);
+}
