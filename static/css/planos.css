@@ -11,6 +11,8 @@
     align-items: center;
     min-height: 340px;
     padding: 64px 24px;
+    padding-top: 120px;
+    padding-bottom: 80px;
     background:
         linear-gradient(
             90deg,
@@ -23,6 +25,14 @@
             var(--color-dark-blue)
         );
     border-bottom: 1px solid var(--color-border);
+}
+
+@media(max-width: 768px) {
+    .pagina-planos .hero-planos {
+        padding-top: 170px;
+        padding-bottom: 80px;
+    }
+
 }
 
 .pagina-planos .hero-planos-conteudo {

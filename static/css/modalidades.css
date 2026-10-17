@@ -142,7 +142,6 @@
 }
 
 /* Imagens preenchendo o card */
-
 .pagina-modalidades .card-imagem {
     display: block;
     width: 100%;
@@ -205,7 +204,6 @@
 }
 
 /* ---------- Botão "Saiba mais" ---------- */
-
 .pagina-modalidades .btn-secundario {
     display: inline-flex;
     align-items: center;
