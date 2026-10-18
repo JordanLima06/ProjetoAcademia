@@ -5,8 +5,8 @@
 {% block content %}
 <section class="section-padding section-surface">
     <div class="container">
-        <a href="{{ url_for('modalidade') }}" class="btn btn-outline-light mb-4">
-            ← Voltar às modalidades
+        <a href="{{ url_for('home') }}" class="btn btn-outline-light mb-4">
+            ← Voltar
         </a>
 
         <div class="row align-items-center g-4">
@@ -26,8 +26,8 @@
                     {{ item.descricao }}
                 </p>
 
-                <a href="{{ url_for('listar_planos') }}" class="btn btn-accent mt-3">
-                    Conheça os planos
+                <a href="{{ url_for('cadastro') }}" class="btn btn-accent mt-3">
+                    Se inscreva agora
                 </a>
             </div>
         </div>
