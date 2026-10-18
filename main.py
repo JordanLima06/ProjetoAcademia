@@ -103,6 +103,15 @@ def modalidade():
         modalidades=modalidades
     )
 
+@app.get("/login")
+def login():
+    return render_template("login.html")
+
+@app.get("/cadastro")
+def cadastro():
+    return render_template("cadastro.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
 

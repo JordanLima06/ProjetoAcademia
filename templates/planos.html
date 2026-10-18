@@ -2,11 +2,15 @@
 
 {% block title %}Planos | FightAcademy{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/planos.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="pagina-planos">
-
     <section class="hero-planos" aria-labelledby="titulo-planos">
         <div class="hero-planos-conteudo">
+
             <p class="eyebrow-planos">Seu próximo nível começa aqui</p>
 
             <h1 id="titulo-planos">Escolha seu plano.</h1>
@@ -15,15 +19,17 @@
                 Encontre a opção ideal para seus objetivos e evolua
                 no seu ritmo com a FightAcademy.
             </p>
+
         </div>
     </section>
 
     <section class="faixa-planos" aria-labelledby="lista-planos">
         <div class="conteudo-planos">
-
             <header class="secao-planos">
                 <h2 id="lista-planos">Nossos planos</h2>
-                <p>Compare os benefícios e encontre o plano ideal para você.</p>
+                <p>
+                    Compare os benefícios e encontre o plano ideal para você.
+                </p>
             </header>
 
             <div class="grade-planos">
@@ -61,7 +67,7 @@
                         </ul>
                         {% endif %}
 
-                        <a class="botao-plano" href="{{ url_for('listar_planos') }}">
+                        <a class="botao-plano" href="{{ url_for('cadastro') }}">
                             Quero este plano
                         </a>
                     </div>
@@ -73,10 +79,13 @@
             <section class="cta-planos" aria-labelledby="titulo-cta-planos">
                 <div>
                     <h2 id="titulo-cta-planos">Pronto para começar?</h2>
-                    <p>Escolha seu plano e dê o próximo passo na sua jornada.</p>
+
+                    <p>
+                        Escolha seu plano e dê o próximo passo na sua jornada.
+                    </p>
                 </div>
 
-                <a class="botao-plano botao-cta-plano" href="{{ url_for('listar_planos') }}">
+                <a class="botao-plano botao-cta-plano" href="{{ url_for('cadastro') }}">
                     Fazer cadastro
                 </a>
             </section>

@@ -1,0 +1,163 @@
+{% extends "index.html" %}
+
+{% block title %}Cadastro | FightAcademy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="cadastro-main" id="conteudo" tabindex="-1">
+    <section class="cadastro-section" aria-labelledby="titulo-cadastro">
+
+        <a class="voltar" href="{{ url_for('login') }}">
+            &larr; Voltar ao login
+        </a>
+
+        <header class="cadastro-cabecalho">
+            <h1 id="titulo-cadastro">Crie sua conta</h1>
+            <p>Preencha seus dados para começar sua jornada.</p>
+        </header>
+
+        <form id="cadastro-form"
+              class="cadastro-form"
+              method="POST"
+              action="{{ url_for('cadastro') }}"
+              novalidate
+              aria-describedby="aviso-demo">
+
+            <p class="aviso-demo" id="aviso-demo">
+                Cadastro demonstrativo: nenhuma conta será criada ou salva.
+            </p>
+
+            <div class="campo">
+                <label for="nome">Nome completo</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome completo"
+                    autocomplete="name"
+                    maxlength="120"
+                    required
+                    aria-describedby="nome-erro"
+                >
+                <p class="erro" id="nome-erro" aria-live="polite"></p>
+            </div>
+
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="seuemail@exemplo.com"
+                    autocomplete="email"
+                    inputmode="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                    aria-describedby="email-erro"
+                >
+                <p class="erro" id="email-erro" aria-live="polite"></p>
+            </div>
+
+            <div class="campo">
+                <label for="senha">Senha</label>
+
+                <div class="senha-wrapper">
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="Crie uma senha"
+                        autocomplete="new-password"
+                        minlength="8"
+                        required
+                        aria-describedby="senha-ajuda senha-erro"
+                    >
+
+                    <button
+                        class="toggle-senha"
+                        type="button"
+                        aria-label="Mostrar senha"
+                        aria-pressed="false"
+                        aria-controls="senha">
+                        Mostrar
+                    </button>
+                </div>
+
+                <p class="dica-senha" id="senha-ajuda">
+                    Use pelo menos 8 caracteres.
+                </p>
+                <p class="erro" id="senha-erro" aria-live="polite"></p>
+            </div>
+
+            <div class="campo">
+                <label for="confirmar">Confirmar senha</label>
+
+                <div class="senha-wrapper">
+                    <input
+                        type="password"
+                        id="confirmar"
+                        name="confirmar"
+                        placeholder="Digite a senha novamente"
+                        autocomplete="new-password"
+                        required
+                        aria-describedby="confirmar-erro"
+                    >
+
+                    <button
+                        class="toggle-senha"
+                        type="button"
+                        aria-label="Mostrar senha"
+                        aria-pressed="false"
+                        aria-controls="confirmar">
+                        Mostrar
+                    </button>
+                </div>
+
+                <p class="erro" id="confirmar-erro" aria-live="polite"></p>
+            </div>
+
+            <p
+                class="mensagem"
+                id="cadastro-status"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true">
+            </p>
+
+            <button class="btn-cadastro" id="cadastrar" type="submit">
+                Criar conta
+            </button>
+        </form>
+
+        <div class="separador" aria-hidden="true">
+            <span>ou</span>
+        </div>
+
+        <button class="btn-secundario" id="google" type="button">
+            <span class="google-icone" aria-hidden="true">G</span>
+            Cadastrar com Google
+        </button>
+
+        <p
+            class="mensagem"
+            id="google-status"
+            role="status"
+            aria-live="polite">
+        </p>
+
+        <p class="cadastro-texto">
+            Já possui cadastro?
+            <a href="{{ url_for('login') }}">Entrar na minha conta</a>
+        </p>
+
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/cadastro.js') }}" defer></script>
+{% endblock %}
