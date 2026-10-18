@@ -43,3 +43,27 @@
 .navbar-toggler-icon {
   filter: brightness(0) invert(1);
 }
+
+.navbar.fixed-top {
+    z-index: 1030;
+}
+
+body {
+    padding-top: 76px;
+}
+
+@media (max-width: 991.98px) {
+    .navbar.fixed-top {
+        position: sticky;
+    }
+
+    body {
+        padding-top: 0;
+    }
+
+    .navbar.fixed-top .navbar-collapse {
+        max-height: calc(100dvh - 72px);
+        overflow-y: auto;
+        padding-bottom: 16px;
+    }
+}
