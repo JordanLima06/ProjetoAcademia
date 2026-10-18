@@ -1,114 +1,129 @@
 
-const form = document.getElementById("cadastro-form");
+/* Demonstração: não cria conta nem armazena dados. */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("cadastro-form");
 
-if (form) {
-    const nome = document.getElementById("nome");
-    const email = document.getElementById("email");
-    const senha = document.getElementById("senha");
-    const confirmar = document.getElementById("confirmar");
+  if (!form) return;
 
-    const campos = [nome, email, senha, confirmar];
-    const statusCadastro = document.getElementById("cadastro-status");
-    const botaoEnviar = document.getElementById("cadastrar");
-    const botaoGoogle = document.getElementById("google");
-    const statusGoogle = document.getElementById("google-status");
+  const nome = document.getElementById("nome");
+  const email = document.getElementById("email");
+  const senha = document.getElementById("senha");
+  const confirmar = document.getElementById("confirmar");
 
-    function validar(campo) {
-        let erro = "";
+  const campos = [nome, email, senha, confirmar].filter(Boolean);
+  const statusCadastro = document.getElementById("cadastro-status");
+  const botaoGoogle = document.getElementById("google");
+  const statusGoogle = document.getElementById("google-status");
 
-        if (!campo.value.trim()) {
-            erro = "Preencha este campo.";
-        } else if (campo === nome && campo.value.trim().length < 2) {
-            erro = "Informe seu nome completo.";
-        } else if (campo === email && campo.validity.typeMismatch) {
-            erro = "Informe um endereço de e-mail válido.";
-        } else if (campo === senha && campo.value.length < 8) {
-            erro = "A senha precisa ter pelo menos 8 caracteres.";
-        } else if (
-            campo === confirmar &&
-            campo.value !== senha.value
-        ) {
-            erro = "As senhas não são iguais.";
-        }
+  function validar(campo) {
+    if (!campo) return false;
 
-        campo.setAttribute("aria-invalid", String(Boolean(erro)));
+    let erro = "";
 
-        const mensagemErro = document.getElementById(
-            `${campo.id}-erro`
-        );
-
-        if (mensagemErro) {
-            mensagemErro.textContent = erro;
-        }
-
-        return erro === "";
+    if (!campo.value.trim()) {
+      erro = "Preencha este campo.";
+    } else if (
+      campo === nome &&
+      campo.value.trim().length < 2
+    ) {
+      erro = "Informe seu nome completo.";
+    } else if (
+      campo === email &&
+      campo.validity.typeMismatch
+    ) {
+      erro = "Informe um e-mail válido.";
+    } else if (
+      campo === senha &&
+      campo.value.length < 8
+    ) {
+      erro = "A senha precisa ter pelo menos 8 caracteres.";
+    } else if (
+      campo === confirmar &&
+      campo.value !== senha.value
+    ) {
+      erro = "As senhas não são iguais.";
     }
 
-    // Valida novamente quando o usuário altera os campos.
-    campos.forEach((campo) => {
-        campo.addEventListener("input", () => {
-            statusCadastro.textContent = "";
+    campo.setAttribute("aria-invalid", String(Boolean(erro)));
 
-            if (campo.getAttribute("aria-invalid") === "true") {
-                validar(campo);
-            }
+    const mensagemErro = document.getElementById(
+      `${campo.id}-erro`
+    );
 
-            if (campo === senha && confirmar.value) {
-                validar(confirmar);
-            }
+    if (mensagemErro) mensagemErro.textContent = erro;
 
-            if (campo === confirmar && confirmar.value) {
-                validar(confirmar);
-            }
-        });
+    return erro === "";
+  }
+
+  campos.forEach((campo) => {
+    campo.addEventListener("input", () => {
+      if (statusCadastro) statusCadastro.textContent = "";
+
+      if (campo.getAttribute("aria-invalid") === "true") {
+        validar(campo);
+      }
+
+      if (campo === senha && confirmar?.value) {
+        validar(confirmar);
+      }
+
+      if (campo === confirmar && confirmar.value) {
+        validar(confirmar);
+      }
     });
+  });
 
-    // Mostrar ou ocultar as senhas.
-    document.querySelectorAll(".toggle-senha").forEach((botao) => {
-        botao.addEventListener("click", () => {
-            const campoId = botao.getAttribute("aria-controls");
-            const campo = document.getElementById(campoId);
+  // Mostrar ou ocultar senha.
+  document.querySelectorAll(".toggle-senha").forEach((botao) => {
+    botao.addEventListener("click", () => {
+      const campoId = botao.getAttribute("aria-controls");
+      const campo = document.getElementById(campoId);
 
-            if (!campo) return;
+      if (!campo) {
+        console.error("Campo de senha não encontrado:", campoId);
+        return;
+      }
 
-            const mostrar = campo.type === "password";
+      const mostrar = campo.type === "password";
 
-            campo.type = mostrar ? "text" : "password";
-            botao.setAttribute("aria-pressed", String(mostrar));
-            botao.setAttribute(
-                "aria-label",
-                mostrar ? "Ocultar senha" : "Mostrar senha"
-            );
+      campo.type = mostrar ? "text" : "password";
+      botao.setAttribute("aria-pressed", String(mostrar));
+      botao.setAttribute(
+        "aria-label",
+        mostrar ? "Ocultar senha" : "Mostrar senha"
+      );
 
-            botao.textContent = mostrar ? "Ocultar" : "Mostrar";
-        });
+      botao.textContent = mostrar ? "Ocultar" : "Mostrar";
     });
+  });
 
-    // Validação do formulário demonstrativo.
-    form.addEventListener("submit", (evento) => {
-        evento.preventDefault();
+  form.addEventListener("submit", (evento) => {
+    evento.preventDefault();
 
-        const resultados = campos.map(validar);
-        const primeiroErro = resultados.indexOf(false);
+    const resultados = campos.map(validar);
+    const primeiroErro = resultados.indexOf(false);
 
-        if (primeiroErro !== -1) {
-            statusCadastro.textContent =
-                "Existem campos que precisam ser corrigidos.";
-
-            campos[primeiroErro].focus();
-            return;
-        }
-
+    if (primeiroErro !== -1) {
+      if (statusCadastro) {
         statusCadastro.textContent =
-            "Dados validados. Este cadastro é demonstrativo: " +
-            "nenhuma conta foi criada ou dado foi salvo.";
-    });
+          "Existem campos que precisam ser corrigidos.";
+      }
 
-    // O cadastro com Google ainda não está integrado.
-    if (botaoGoogle && statusGoogle) {
-        botaoGoogle.addEventListener("click", () => {
-            statusGoogle.textContent =
-                "O cadastro com Google ainda não está conectado.";
-        });
+      campos[primeiroErro].focus();
+      return;
     }
-}
+
+    if (statusCadastro) {
+      statusCadastro.textContent =
+        "Dados validados. Este cadastro é demonstrativo: " +
+        "nenhuma conta foi criada ou dado foi salvo.";
+    }
+  });
+
+  if (botaoGoogle && statusGoogle) {
+    botaoGoogle.addEventListener("click", () => {
+      statusGoogle.textContent =
+        "O cadastro com Google ainda não está conectado.";
+    });
+  }
+});
