@@ -1,0 +1,166 @@
+:root {
+    --focus-color: #78A9FF;
+    --focus-width: 3px;
+    --focus-offset: 3px;
+    --button-min-height: 44px;
+    --button-radius: var(--radius-sm);
+}
+
+/* 1. Foco visível pelo teclado */
+:where(a[href],
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [role="button"],
+    [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: var(--focus-width) solid var(--focus-color);
+    outline-offset: var(--focus-offset);
+    scroll-margin-block: 6rem;
+}
+
+
+:where(input, select, textarea):focus-visible {
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 3px rgb(120 169 255 / 22%);
+}
+
+
+:where(.btn,
+    .botao,
+    .botao-plano,
+    .botao-cta-plano,
+    .plan-button,
+    .plan-all-button,
+    .btn-login,
+    .btn-cadastro,
+    .btn-secundario,
+    .btn-google,
+    .ds-btn) {
+    box-sizing: border-box;
+    min-height: var(--button-min-height);
+    border-radius: var(--button-radius);
+    font-family: var(--font-main);
+    line-height: 1.35;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        color var(--transition-default),
+        background-color var(--transition-default),
+        border-color var(--transition-default),
+        box-shadow var(--transition-default),
+        transform var(--transition-fast);
+}
+
+
+:where(.mostrar-senha, .toggle-senha) {
+    box-sizing: border-box;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-grid;
+    place-items: center;
+}
+
+
+.link-botao {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 8px;
+}
+
+/* 6. Links do menu */
+.navbar .nav-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+
+:where(button,
+    input[type="submit"],
+    input[type="button"],
+    .btn,
+    .botao,
+    .botao-plano,
+    .btn-login,
+    .btn-cadastro,
+    .btn-secundario,
+    .btn-google):disabled,
+[aria-disabled="true"] {
+    opacity: 0.58;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+.skip-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 2000;
+
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 10px 16px;
+
+    transform: translateY(calc(-100% - 16px));
+    border: 2px solid var(--focus-color);
+    border-radius: var(--radius-sm);
+
+    background: var(--color-white);
+    color: var(--color-dark);
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: var(--shadow-card);
+}
+
+
+.skip-link:focus,
+.skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 3px solid var(--color-dark);
+    outline-offset: 2px;
+}
+
+
+#main-content:focus {
+    outline: none;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+.campo input:focus-visible,
+.campo select:focus-visible,
+.campo textarea:focus-visible,
+.ds-field input:focus-visible,
+.ds-field select:focus-visible,
+.ds-field textarea:focus-visible {
+    outline: var(--focus-width) solid var(--focus-color);
+    outline-offset: 2px;
+    border-color: var(--focus-color);
+    box-shadow: 0 0 0 3px rgb(120 169 255 / 22%);
+}
+
+
+.senha-wrapper .toggle-senha {
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+}

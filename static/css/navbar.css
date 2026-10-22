@@ -21,7 +21,7 @@
 }
 
 .navbar .nav-link {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: 0.92rem;
   transition: color var(--transition-default);
 }
@@ -51,6 +51,26 @@
 body {
     padding-top: 76px;
 }
+
+.navbar .nav-link:focus-visible,
+.navbar .navbar-brand:focus-visible,
+.navbar .btn:focus-visible,
+.navbar .navbar-toggler:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* Texto branco quando o link recebe foco */
+.navbar .nav-link:focus-visible {
+    color: var(--color-white);
+}
+
+/* Contorno do botão de menu em telas pequenas */
+.navbar .navbar-toggler:focus-visible {
+    box-shadow: none;
+}
+
 
 @media (max-width: 991.98px) {
     .navbar.fixed-top {
