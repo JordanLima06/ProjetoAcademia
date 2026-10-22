@@ -1,0 +1,264 @@
+{% extends "index.html" %}
+{% block title %}Design System | FightAcademy{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}">{% endblock %}
+{% block content %}
+<main class="ds-page">
+    <section class="ds-hero">
+        <div class="container">
+            <p class="eyebrow">Guia de interface</p>
+            <h1>FightAcademy <span>Design System</span></h1>
+            <p class="ds-lead">Uma linguagem visual consistente para tornar a experiência da academia clara, acessível e
+                reconhecível em todas as telas.</p>
+            <div class="ds-meta"><span class="ds-status-dot"></span> Tokens e componentes reutilizáveis <span
+                    class="ds-meta-divider">/</span> Tema escuro</div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="cores">
+        <div class="container">
+            <p class="eyebrow">01 / Fundamentos</p>
+            <h2 class="section-title">Cores da marca</h2>
+            <p class="ds-intro">Azul elétrico para ações, superfícies escuras para profundidade e tons claros para
+                leitura.
+                Cores semânticas comunicam estados sem depender apenas do texto.</p>
+            <h3 class="ds-subtitle">Cores principais</h3>
+            <div class="ds-color-grid">
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#1765ED"></div>
+                    <div class="ds-color-info"><strong>Azul primário</strong><code>#1765ED</code><small>Ações
+                            principais</small>
+                    </div>
+                </article>
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#78A9FF"></div>
+                    <div class="ds-color-info"><strong>Azul claro</strong><code>#78A9FF</code><small>Ênfase e
+                            foco</small></div>
+                </article>
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#080B12"></div>
+                    <div class="ds-color-info"><strong>Fundo</strong><code>#080B12</code><small>Fundo principal</small>
+                    </div>
+                </article>
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#172238"></div>
+                    <div class="ds-color-info"><strong>Card</strong><code>#172238</code><small>Conteúdo agrupado</small>
+                    </div>
+                </article>
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#F5F7FA"></div>
+                    <div class="ds-color-info"><strong>Texto principal</strong><code>#F5F7FA</code><small>Títulos e
+                            conteúdo</small></div>
+                </article>
+                <article class="ds-color-card">
+                    <div class="ds-swatch" style="--swatch:#A7B2C5"></div>
+                    <div class="ds-color-info"><strong>Texto
+                            secundário</strong><code>#A7B2C5</code><small>Descrições</small>
+                    </div>
+                </article>
+            </div>
+            <h3 class="ds-subtitle">Estados semânticos</h3>
+            <div class="ds-state-grid">
+                <div class="ds-semantic ds-success"><strong>Sucesso</strong><code>#36C98F</code><span>Operação
+                        concluída</span>
+                </div>
+                <div class="ds-semantic ds-warning"><strong>Atenção</strong><code>#FFD166</code><span>Requer
+                        atenção</span>
+                </div>
+                <div class="ds-semantic ds-danger"><strong>Erro</strong><code>#FF737A</code><span>Algo precisa ser
+                        corrigido</span></div>
+                <div class="ds-semantic ds-info"><strong>Informação</strong><code>#78A9FF</code><span>Orientação ao
+                        usuário</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ds-section ds-section-alt" id="tipografia">
+        <div class="container">
+            <p class="eyebrow">02 / Tipografia</p>
+            <h2 class="section-title">Hierarquia tipográfica</h2>
+            <p class="ds-intro">Montserrat é a família principal. A escala combina títulos fortes com textos
+                confortáveis para
+                leitura.</p>
+            <div class="ds-type-sample">
+                <div><span>Display / clamp</span><code>--font-size-display</code></div>
+                <p class="ds-type-display">Treine no seu ritmo.</p>
+            </div>
+            <div class="ds-type-sample">
+                <div><span>Heading 1</span><code>2rem–3.5rem</code></div>
+                <h1>Seu próximo nível</h1>
+            </div>
+            <div class="ds-type-sample">
+                <div><span>Heading 2</span><code>--font-size-2xl</code></div>
+                <h2>Modalidades e planos</h2>
+            </div>
+            <div class="ds-type-sample">
+                <div><span>Corpo</span><code>--font-size-md / 1.7</code></div>
+                <p>Treinamento, consistência e evolução com uma interface fácil de entender.</p>
+            </div>
+            <div class="ds-type-sample">
+                <div><span>Texto auxiliar</span><code>--font-size-sm</code></div>
+                <p class="ds-muted">Informações complementares, legendas e orientações de formulário.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="componentes">
+        <div class="container">
+            <p class="eyebrow">03 / Componentes</p>
+            <h2 class="section-title">Biblioteca de interface</h2>
+            <p class="ds-intro">Use os mesmos componentes em páginas diferentes para reduzir inconsistências e facilitar
+                manutenção.</p>
+            <div class="ds-component-block">
+                <div class="ds-component-heading">
+                    <h3>Botões</h3>
+                    <p>Altura mínima de 44px; rótulos objetivos e estados visíveis.</p>
+                </div>
+                <div class="ds-demo-row"><button class="ds-btn ds-btn-primary" type="button">Ação
+                        principal</button><button class="ds-btn ds-btn-secondary" type="button">Ação
+                        secundária</button><button class="ds-btn ds-btn-quiet" type="button">Ação
+                        discreta</button><button class="ds-btn ds-btn-primary" type="button"
+                        disabled>Desabilitado</button></div>
+                <p class="ds-hint">Passe o mouse e use Tab para observar hover e foco. O botão desabilitado é apenas uma
+                    demonstração.</p>
+            </div>
+            <div class="ds-component-block">
+                <div class="ds-component-heading">
+                    <h3>Campos de formulário</h3>
+                    <p>Label visível, instrução quando necessária e erro associado ao campo.</p>
+                </div>
+                <div class="ds-form-demo">
+                    <div class="ds-field"><label for="ds-nome">Nome completo</label><input id="ds-nome" type="text"
+                            placeholder="Ex.: Ana Souza"><small>Use o nome que deseja informar no cadastro.</small>
+                    </div>
+                    <div class="ds-field"><label for="ds-email">E-mail</label><input id="ds-email" type="email"
+                            placeholder="voce@exemplo.com" aria-describedby="ds-email-help"><small
+                            id="ds-email-help">Nunca exibimos
+                            sua senha em texto aberto.</small></div>
+                    <div class="ds-field"><label for="ds-erro">Exemplo de erro</label><input id="ds-erro" type="text"
+                            value="E-mail inválido" aria-invalid="true" aria-describedby="ds-error-msg"><small
+                            id="ds-error-msg" class="ds-error-text">Confira o formato e tente novamente.</small></div>
+                </div>
+            </div>
+            <div class="ds-component-block">
+                <div class="ds-component-heading">
+                    <h3>Cards</h3>
+                    <p>Superfícies para organizar planos, modalidades e informações relacionadas.</p>
+                </div>
+                <div class="ds-demo-cards">
+                    <article class="ds-card"><span class="ds-card-kicker">MODALIDADE</span>
+                        <h4>Musculação</h4>
+                        <p>Treinos para diferentes objetivos, respeitando o ritmo de cada pessoa.</p><a
+                            href="{{ url_for('modalidade') }}">Ver modalidades →</a>
+                    </article>
+                    <article class="ds-card ds-card-featured"><span class="ds-card-kicker">PLANO EM DESTAQUE</span>
+                        <h4>Performance</h4>
+                        <p>Uma opção para quem busca ampliar as possibilidades de treino.</p><a
+                            href="{{ url_for('listar_planos') }}">Comparar planos →</a>
+                    </article>
+                </div>
+            </div>
+            <div class="ds-component-block">
+                <div class="ds-component-heading">
+                    <h3>Feedback e estados</h3>
+                    <p>Mensagem com ícone/texto, cor semântica e linguagem clara.</p>
+                </div>
+                <div class="ds-alert ds-alert-success" role="status"><strong>Sucesso:</strong> exemplo de confirmação de
+                    uma
+                    ação.</div>
+                <div class="ds-alert ds-alert-warning" role="status"><strong>Atenção:</strong> confira as informações
+                    antes de
+                    continuar.</div>
+                <div class="ds-alert ds-alert-danger" role="alert"><strong>Erro:</strong> não foi possível concluir.
+                    Revise os
+                    campos.</div>
+                <div class="ds-alert ds-alert-info" role="status"><strong>Informação:</strong> esta tela é uma
+                    demonstração de
+                    componentes.</div>
+            </div>
+            <div class="ds-component-block">
+                <div class="ds-component-heading">
+                    <h3>Etiquetas de estado</h3>
+                    <p>Indicadores compactos que não dependem apenas da cor.</p>
+                </div>
+                <div class="ds-demo-row"><span class="ds-badge ds-badge-success">Ativo</span><span
+                        class="ds-badge ds-badge-warning">Pendente</span><span
+                        class="ds-badge ds-badge-danger">Erro</span><span
+                        class="ds-badge ds-badge-info">Informativo</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ds-section ds-section-alt" id="espacamento">
+        <div class="container">
+            <p class="eyebrow">04 / Layout</p>
+            <h2 class="section-title">Espaçamento e formas</h2>
+            <p class="ds-intro">Use a escala baseada em múltiplos de 4px para manter ritmo e alinhamento consistentes.
+            </p>
+            <div class="ds-spacing-list">
+                <div><code>--space-1 · 4px</code><span style="--bar:4px"></span></div>
+                <div><code>--space-2 · 8px</code><span style="--bar:8px"></span></div>
+                <div><code>--space-3 · 12px</code><span style="--bar:12px"></span></div>
+                <div><code>--space-4 · 16px</code><span style="--bar:16px"></span></div>
+                <div><code>--space-6 · 24px</code><span style="--bar:24px"></span></div>
+                <div><code>--space-8 · 32px</code><span style="--bar:32px"></span></div>
+                <div><code>--space-12 · 48px</code><span style="--bar:48px"></span></div>
+            </div>
+            <div class="ds-radius-row">
+                <div><span class="ds-radius-example radius-sm"></span><code>6px · small</code></div>
+                <div><span class="ds-radius-example radius-md"></span><code>12px · medium</code></div>
+                <div><span class="ds-radius-example radius-lg"></span><code>18px · large</code></div>
+                <div><span class="ds-radius-example radius-pill"></span><code>999px · pill</code></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ds-section" id="acessibilidade">
+        <div class="container">
+            <p class="eyebrow">05 / Acessibilidade</p>
+            <h2 class="section-title">Regras essenciais</h2>
+            <div class="ds-a11y-grid">
+                <article><span>01</span>
+                    <h3>Contraste</h3>
+                    <p>Validar texto normal em pelo menos 4,5:1 e texto grande em pelo menos 3:1, conforme WCAG 2.0 AA.
+                    </p>
+                </article>
+                <article><span>02</span>
+                    <h3>Teclado</h3>
+                    <p>Todos os controles devem funcionar por teclado e apresentar foco visível, sem prender a
+                        navegação.</p>
+                </article>
+                <article><span>03</span>
+                    <h3>Formulários</h3>
+                    <p>Usar labels persistentes, instruções úteis e erros descritos em texto e associados aos campos.
+                    </p>
+                </article>
+                <article><span>04</span>
+                    <h3>Área de toque</h3>
+                    <p>Projetar botões e controles com pelo menos 44 × 44px como padrão do projeto.</p>
+                </article>
+                <article><span>05</span>
+                    <h3>Movimento</h3>
+                    <p>Respeitar a preferência do sistema por movimento reduzido quando houver animações.</p>
+                </article>
+                <article><span>06</span>
+                    <h3>Não depender da cor</h3>
+                    <p>Estados de sucesso, erro e atenção precisam de rótulos ou ícones além da cor.</p>
+                </article>
+            </div>
+            <div class="ds-note"><strong>Importante:</strong> esta página documenta o padrão visual e as práticas
+                recomendadas. Ela não representa, por si só, um certificado de conformidade WCAG; cada tela deve ser
+                testada.
+            </div>
+        </div>
+    </section>
+    <section class="ds-end">
+        <div class="container">
+            <p class="eyebrow">FightAcademy</p>
+            <h2>Consistência em cada interação.</h2>
+            <p>Use este guia ao criar ou revisar qualquer tela do projeto.</p><a class="ds-btn ds-btn-primary"
+                href="{{ url_for('home') }}">Voltar ao site</a>
+        </div>
+    </section>
+</main>
+{% endblock %}

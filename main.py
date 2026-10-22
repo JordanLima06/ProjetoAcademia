@@ -112,6 +112,14 @@ def cadastro():
     return render_template("cadastro.html")
 
 
+@app.get("/sobre")
+def sobre():
+    return render_template("sobre.html")
+
+@app.get("/design")
+def design_system():
+    return render_template("design.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
 
