@@ -52,7 +52,7 @@
                     para alcançar seus objetivos.
                 </p>
 
-                <a href="{{ url_for('static', filename='sobre.html') }}" class="btn btn-outline-light mt-3">
+                <a href="{{ url_for('sobre') }}" class="btn btn-outline-light mt-3">
                     Saiba mais sobre nós
                 </a>
             </div>
@@ -73,8 +73,7 @@
             <div class="col-12 col-sm-6 col-lg-4">
                 <article class="card h-100">
                     <img src="{{ url_for('static', filename=modalidade.imagem) }}" class="card-img-top"
-                        alt="Treino de {{ modalidade.nome }}" loading="lazy"
-                    >
+                        alt="Treino de {{ modalidade.nome }}" loading="lazy">
 
                     <div class="card-body d-flex flex-column">
                         <h3 class="card-title">
