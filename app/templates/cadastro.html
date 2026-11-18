@@ -15,14 +15,17 @@
         {% include '_partials/btn_voltar.html' %}
 
         <header class="cadastro-cabecalho">
-            <h1 id="titulo-cadastro">Crie sua conta</h1>
+            <h1 id="titulo-cadastro">CADASTRO DE ALUNO</h1>
             <p>Preencha seus dados para começar sua jornada.</p>
         </header>
+
+        {% set plano_param = request.args.get('plano', '') %}
+        {% set modalidade_param = request.args.get('modalidade', '') %}
 
         <form id="cadastro-form"
               class="cadastro-form"
               method="POST"
-              action="{{ url_for('cadastro') }}"
+              action="{{ url_for('auth.cadastro') }}"
               novalidate
               aria-describedby="aviso-demo">
 
@@ -30,96 +33,166 @@
                 Cadastro demonstrativo: nenhuma conta será criada ou salva.
             </p>
 
-            <div class="campo">
-                <label for="nome">Nome completo</label>
-                <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    placeholder="Digite seu nome completo"
-                    autocomplete="name"
-                    maxlength="120"
-                    required
-                    aria-describedby="nome-erro"
-                >
-                <p class="erro" id="nome-erro" aria-live="polite"></p>
-            </div>
-
-            <div class="campo">
-                <label for="email">E-mail</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="seuemail@exemplo.com"
-                    autocomplete="email"
-                    inputmode="email"
-                    autocapitalize="none"
-                    spellcheck="false"
-                    required
-                    aria-describedby="email-erro"
-                >
-                <p class="erro" id="email-erro" aria-live="polite"></p>
-            </div>
-
-            <div class="campo">
-                <label for="senha">Senha</label>
-
-                <div class="senha-wrapper">
+            <div class="cadastro-grid">
+                <!-- 1. Nome completo -->
+                <div class="campo campo-cheio">
+                    <label for="nome">Nome completo</label>
                     <input
-                        type="password"
-                        id="senha"
-                        name="senha"
-                        placeholder="Crie uma senha"
-                        autocomplete="new-password"
-                        minlength="8"
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite seu nome completo"
+                        autocomplete="name"
+                        maxlength="120"
                         required
-                        aria-describedby="senha-ajuda senha-erro"
+                        aria-describedby="nome-erro"
                     >
-
-                    <button
-                        class="toggle-senha"
-                        type="button"
-                        aria-label="Mostrar senha"
-                        aria-pressed="false"
-                        aria-controls="senha">
-                        Mostrar
-                    </button>
+                    <p class="erro" id="nome-erro" aria-live="polite"></p>
                 </div>
 
-                <p class="dica-senha" id="senha-ajuda">
-                    Use pelo menos 8 caracteres.
-                </p>
-                <p class="erro" id="senha-erro" aria-live="polite"></p>
-            </div>
-
-            <div class="campo">
-                <label for="confirmar">Confirmar senha</label>
-
-                <div class="senha-wrapper">
+                <!-- 2. E-mail e Telefone -->
+                <div class="campo">
+                    <label for="email">E-mail</label>
                     <input
-                        type="password"
-                        id="confirmar"
-                        name="confirmar"
-                        placeholder="Digite a senha novamente"
-                        autocomplete="new-password"
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="seuemail@exemplo.com"
+                        autocomplete="email"
+                        inputmode="email"
+                        autocapitalize="none"
+                        spellcheck="false"
                         required
-                        aria-describedby="confirmar-erro"
+                        aria-describedby="email-erro"
                     >
-
-                    <button
-                        class="toggle-senha"
-                        type="button"
-                        aria-label="Mostrar senha"
-                        aria-pressed="false"
-                        aria-controls="confirmar">
-                        Mostrar
-                    </button>
+                    <p class="erro" id="email-erro" aria-live="polite"></p>
                 </div>
 
-                <p class="erro" id="confirmar-erro" aria-live="polite"></p>
+                <div class="campo">
+                    <label for="telefone">Telefone</label>
+                    <input
+                        type="tel"
+                        id="telefone"
+                        name="telefone"
+                        placeholder="(00) 00000-0000"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        maxlength="15"
+                        required
+                        aria-describedby="telefone-erro"
+                    >
+                    <p class="erro" id="telefone-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 3. Data de nascimento e Plano desejado -->
+                <div class="campo">
+                    <label for="data_nascimento">Data de nascimento</label>
+                    <input
+                        type="date"
+                        id="data_nascimento"
+                        name="data_nascimento"
+                        autocomplete="bday"
+                        required
+                        aria-describedby="data-nascimento-erro"
+                    >
+                    <p class="erro" id="data-nascimento-erro" aria-live="polite"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="plano">Plano desejado</label>
+                    <select id="plano" name="plano" required aria-describedby="plano-erro">
+                        <option value="" disabled {% if not plano_param %}selected{% endif %}>Selecione um plano</option>
+                        {% if planos %}
+                            {% for p in planos %}
+                            <option value="{{ p.slug }}" {% if plano_param == p.slug %}selected{% endif %}>
+                                {{ p.nome }} — {% if p.slug == 'anual' %}R$ {{ "%.2f"|format(p.preco)|replace('.', ',') }}/ano{% else %}R$ {{ "%.2f"|format(p.preco)|replace('.', ',') }}/mês{% endif %}
+                            </option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="essencial" {% if plano_param == 'essencial' %}selected{% endif %}>Essencial — R$ 79,90/mês</option>
+                            <option value="perfomance" {% if plano_param == 'perfomance' %}selected{% endif %}>Perfomance — R$ 109,90/mês</option>
+                            <option value="premium" {% if plano_param == 'premium' %}selected{% endif %}>Premium — R$ 139,90/mês</option>
+                            <option value="anual" {% if plano_param == 'anual' %}selected{% endif %}>Anual — R$ 1.399,90/ano</option>
+                        {% endif %}
+                    </select>
+                    <p class="erro" id="plano-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 4. Senha e Confirmação de senha -->
+                <div class="campo">
+                    <label for="senha">Senha</label>
+                    <div class="senha-wrapper">
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            placeholder="Crie uma senha"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                            aria-describedby="senha-ajuda senha-erro"
+                        >
+                        <button
+                            class="toggle-senha"
+                            type="button"
+                            aria-label="Mostrar senha"
+                            aria-pressed="false"
+                            aria-controls="senha">
+                            Mostrar
+                        </button>
+                    </div>
+                    <p class="dica-senha" id="senha-ajuda">Use pelo menos 8 caracteres.</p>
+                    <p class="erro" id="senha-erro" aria-live="polite"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="confirmar">Confirmar senha</label>
+                    <div class="senha-wrapper">
+                        <input
+                            type="password"
+                            id="confirmar"
+                            name="confirmar"
+                            placeholder="Digite a senha novamente"
+                            autocomplete="new-password"
+                            required
+                            aria-describedby="confirmar-erro"
+                        >
+                        <button
+                            class="toggle-senha"
+                            type="button"
+                            aria-label="Mostrar senha"
+                            aria-pressed="false"
+                            aria-controls="confirmar">
+                            Mostrar
+                        </button>
+                    </div>
+                    <p class="erro" id="confirmar-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 5. Modalidade de interesse -->
+                <div class="campo campo-cheio">
+                    <label for="modalidade">Modalidade de interesse</label>
+                    <select id="modalidade" name="modalidade" required aria-describedby="modalidade-erro">
+                        <option value="" disabled {% if not modalidade_param %}selected{% endif %}>Selecione uma modalidade</option>
+                        {% if modalidades %}
+                            {% for m in modalidades %}
+                            <option value="{{ m.slug }}" {% if modalidade_param == m.slug %}selected{% endif %}>
+                                {{ m.nome }} ({{ m.tag }})
+                            </option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="musculacao" {% if modalidade_param == 'musculacao' %}selected{% endif %}>Musculação (Força e Hipertrófia)</option>
+                            <option value="boxe" {% if modalidade_param == 'boxe' %}selected{% endif %}>Boxe (Agilidade e Resistência)</option>
+                            <option value="jiu-jitsu" {% if modalidade_param == 'jiu-jitsu' %}selected{% endif %}>Jiu-Jitsu (Estratégia e controle)</option>
+                            <option value="funcional" {% if modalidade_param == 'funcional' %}selected{% endif %}>Funcional (Mobilidade e equilíbrio)</option>
+                            <option value="crossfit" {% if modalidade_param == 'crossfit' %}selected{% endif %}>CrossFit (Força e resistência)</option>
+                        {% endif %}
+                    </select>
+                    <p class="erro" id="modalidade-erro" aria-live="polite"></p>
+                </div>
             </div>
 
+            <!-- Feedback de status -->
             <p
                 class="mensagem"
                 id="cadastro-status"
@@ -128,8 +201,9 @@
                 aria-atomic="true">
             </p>
 
+            <!-- 6. Botão "CRIAR MINHA CONTA" -->
             <button class="btn-cadastro" id="cadastrar" type="submit">
-                Criar conta
+                CRIAR MINHA CONTA
             </button>
         </form>
 
@@ -149,9 +223,10 @@
             aria-live="polite">
         </p>
 
+        <!-- 7. Link para quem já possui cadastro -->
         <p class="cadastro-texto">
             Já possui cadastro?
-            <a href="{{ url_for('login') }}">Entrar na minha conta</a>
+            <a href="{{ url_for('auth.login') }}">Entrar na minha conta</a>
         </p>
 
     </section>

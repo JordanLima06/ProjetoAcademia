@@ -1,175 +1,258 @@
-/* Página */
+/* =====================================================
+   FIGHTACADEMY — PÁGINA DE CADASTRO DE ALUNO
+   Design System: root.css, acessibilidade.css
+===================================================== */
+
+/* Container Principal */
 .cadastro-main {
-  min-height: 100%;
+  min-height: calc(100vh - 160px);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 16px;
-  background: var(--gradient-background);
-  color: var(--color-text);
-  font-family: var(--font-main);
+  padding: 48px 16px;
+  background: var(--gradient-background, linear-gradient(180deg, #080B12 0%, #0D1424 100%));
+  color: var(--color-text, #F5F7FA);
+  font-family: var(--font-main, "Montserrat", sans-serif);
+  box-sizing: border-box;
 }
 
-/* Cartão */
+/* Card Centralizado */
 .cadastro-section {
   width: 100%;
-  max-width: 460px;
-  padding: 32px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  max-width: 780px;
+  padding: 40px;
+  background: var(--color-surface, #121A2B);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
 }
 
-.voltar {
-  display: inline-block;
-  margin-bottom: 24px;
-  color: var(--color-primary-light);
-  text-decoration: none;
-}
-
-.voltar:hover,
-.cadastro-texto a:hover {
-  text-decoration: underline;
-}
-
+/* Cabeçalho */
 .cadastro-cabecalho {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .cadastro-cabecalho h1 {
-  margin: 0 0 10px;
-  font-size: clamp(1.6rem, 5vw, 2rem);
-  font-weight: 700;
+  margin: 0 0 8px;
+  font-size: clamp(1.8rem, 4vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text, #F5F7FA);
+  text-transform: uppercase;
 }
 
-.cadastro-cabecalho p,
-.cadastro-texto {
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-.aviso-demo {
-  padding: 12px;
+.cadastro-cabecalho p {
   margin: 0;
-  color: var(--color-text-muted);
-  background: var(--color-dark-blue);
-  border-left: 3px solid var(--color-primary);
-  border-radius: var(--radius-sm);
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Aviso de Demonstração */
+.aviso-demo {
+  padding: 12px 16px;
+  margin: 0 0 24px;
+  color: var(--color-text-muted, #A7B2C5);
+  background: var(--color-dark-blue, #0D1424);
+  border-left: 3px solid var(--color-primary, #1765ED);
+  border-radius: var(--radius-sm, 6px);
   font-size: 0.85rem;
   line-height: 1.5;
 }
 
-/* Formulário */
+/* Formulário e Grid de Campos */
 .cadastro-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-.cadastro-section .campo {
+.cadastro-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+}
+
+.campo {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.cadastro-section .campo label {
-  color: var(--color-text);
-  font-size: 0.95rem;
-  font-weight: 600;
+.campo-cheio {
+  grid-column: span 2;
 }
 
-.cadastro-section .campo input {
+.campo label {
+  color: var(--color-text, #F5F7FA);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Inputs e Selects */
+.campo input,
+.campo select {
   width: 100%;
   min-height: 50px;
   padding: 12px 14px;
-  color: var(--color-text);
-  background: var(--color-dark-blue);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font: inherit;
-  font-size: 1rem;
-  transition: border-color var(--transition-default),
-    box-shadow var(--transition-default);
+  color: var(--color-text, #F5F7FA);
+  background: var(--color-dark-blue, #0D1424);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease);
 }
 
-.cadastro-section .campo input::placeholder {
-  color: var(--color-text-muted);
-  opacity: 1;
+.campo select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A7B2C5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
 }
 
-.cadastro-section .campo input:focus-visible,
+.campo select option {
+  background-color: var(--color-surface, #121A2B);
+  color: var(--color-text, #F5F7FA);
+  padding: 10px;
+}
+
+.campo input::placeholder {
+  color: var(--color-text-muted, #A7B2C5);
+  opacity: 0.8;
+}
+
+/* Focus e Validação */
+.campo input:focus,
+.campo select:focus {
+  border-color: var(--color-primary, #1765ED);
+  box-shadow: 0 0 0 3px rgba(23, 101, 237, 0.25);
+  outline: none;
+}
+
+.campo input:focus-visible,
+.campo select:focus-visible,
 .toggle-senha:focus-visible,
 .btn-cadastro:focus-visible,
 .btn-secundario:focus-visible,
-.voltar:focus-visible,
 .cadastro-texto a:focus-visible {
-  outline: 3px solid var(--color-primary-light);
-  outline-offset: 3px;
+  outline: 3px solid var(--color-primary-light, #78A9FF);
+  outline-offset: 2px;
 }
 
-.cadastro-section .campo input:focus {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-blue);
+.campo input[aria-invalid="true"],
+.campo select[aria-invalid="true"] {
+  border-color: #FF737A;
 }
 
-.cadastro-section .campo input[aria-invalid="true"] {
-  border-color: #ff8585;
-}
-
-/* Mostrar/ocultar senha */
+/* Campo de Senha com Toggle */
 .senha-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .senha-wrapper input {
-  padding-right: 88px !important;
+  padding-right: 86px !important;
 }
 
 .toggle-senha {
   position: absolute;
-  right: 10px;
-  padding: 7px;
-  color: var(--color-primary-light);
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 12px;
+  color: var(--color-primary-light, #78A9FF);
   background: transparent;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-sm, 6px);
   cursor: pointer;
-  font: inherit;
+  font-family: inherit;
   font-size: 0.85rem;
+  font-weight: 600;
+  transition: color var(--transition-fast, 0.15s ease);
 }
 
 .toggle-senha:hover {
-  color: var(--color-white);
+  color: var(--color-white, #FFFFFF);
 }
 
-/* Ajuda e erros */
+/* Textos de Ajuda e Erro */
 .dica-senha,
 .erro {
   margin: 0;
-  font-size: 0.85rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 .dica-senha {
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #A7B2C5);
 }
 
 .erro {
-  color: #ff8585;
+  color: #FF737A;
+  min-height: 1.1em;
 }
 
 .mensagem {
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #A7B2C5);
   font-size: 0.9rem;
   line-height: 1.5;
+  text-align: center;
 }
 
-/* Botões */
-.btn-cadastro,
+/* Botão Principal "CRIAR MINHA CONTA" */
+.btn-cadastro {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  color: var(--color-white, #FFFFFF);
+  background: var(--color-primary, #1765ED);
+  border: 0;
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(23, 101, 237, 0.35);
+  transition:
+    background-color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease),
+    transform var(--transition-fast, 0.15s ease);
+}
+
+.btn-cadastro:hover:not(:disabled) {
+  background: var(--color-primary-hover, #0D53CC);
+  box-shadow: 0 6px 20px rgba(23, 101, 237, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-cadastro:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-cadastro:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Botão Secundário Google */
 .btn-secundario {
   width: 100%;
   min-height: 50px;
@@ -178,52 +261,39 @@
   justify-content: center;
   gap: 10px;
   padding: 12px 16px;
-  border-radius: var(--radius-md);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background var(--transition-default),
-    transform var(--transition-default);
-}
-
-.btn-cadastro {
-  color: var(--color-white);
-  background: var(--gradient-primary);
-  border: 0;
-}
-
-.btn-cadastro:hover:not(:disabled) {
-  background: var(--color-primary-hover);
-  transform: translateY(-1px);
-}
-
-.btn-cadastro:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.btn-secundario {
-  color: var(--color-text);
+  color: var(--color-text, #F5F7FA);
   background: transparent;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--transition-default, 0.25s ease),
+    border-color var(--transition-default, 0.25s ease);
 }
 
 .btn-secundario:hover {
-  background: var(--color-card);
+  background: var(--color-card, #172238);
+  border-color: var(--color-primary-light, #78A9FF);
 }
 
 .google-icone {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #78a9ff;
+  color: #78A9FF;
 }
 
+/* Divisor Visual */
 .separador {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   margin: 24px 0;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 0.85rem;
+  text-transform: uppercase;
 }
 
 .separador::before,
@@ -231,76 +301,61 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: var(--color-border);
+  background: var(--color-border, #2B3A55);
 }
 
+/* Rodapé do Card */
 .cadastro-texto {
   margin: 24px 0 0;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
+  color: var(--color-text-muted, #A7B2C5);
 }
 
 .cadastro-texto a {
-  color: var(--color-primary-light);
+  color: var(--color-primary-light, #78A9FF);
   font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
 }
 
-/* Telas pequenas */
-@media (max-width: 480px) {
+.cadastro-texto a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade Mobile (1 Coluna) */
+@media (max-width: 768px) {
   .cadastro-main {
     padding: 24px 12px;
     align-items: flex-start;
   }
 
   .cadastro-section {
-    padding: 24px 18px;
-    border-radius: var(--radius-md);
+    padding: 28px 20px;
+    border-radius: var(--radius-md, 12px);
   }
 
-  .cadastro-form {
+  .cadastro-grid {
+    grid-template-columns: 1fr;
     gap: 18px;
   }
-}
 
-
-/* Ajustes de layout e responsividade */
-.cadastro-main {
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-.cadastro-section {
-  width: 100%;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-@media (max-width: 480px) {
-  .cadastro-main {
-    padding: 24px 12px;
-    align-items: flex-start;
+  .campo-cheio {
+    grid-column: span 1;
   }
 
-  .cadastro-section {
-    padding: 24px 18px;
-    border-radius: var(--radius-md);
-  }
-
-  .cadastro-form {
-    gap: 18px;
+  .cadastro-cabecalho h1 {
+    font-size: 1.65rem;
   }
 }
 
-
-/* Respeita preferência por menos animações */
+/* Acessibilidade — Movimento Reduzido */
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
   }
 }

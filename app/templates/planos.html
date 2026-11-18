@@ -69,7 +69,7 @@
                         </ul>
                         {% endif %}
 
-                        <a class="botao-plano" href="{{ url_for('cadastro') }}">
+                        <a class="botao-plano" href="{{ url_for('auth.cadastro', plano=plano.slug) }}">
                             Quero este plano
                         </a>
                     </div>
@@ -87,7 +87,7 @@
                     </p>
                 </div>
 
-                <a class="botao-plano botao-cta-plano" href="{{ url_for('cadastro') }}">
+                <a class="botao-plano botao-cta-plano" href="{{ url_for('auth.cadastro') }}">
                     Fazer cadastro
                 </a>
             </section>
