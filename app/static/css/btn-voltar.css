@@ -1,0 +1,75 @@
+/* =====================================================
+   FIGHTACADEMY — BOTÃO PADRONIZADO VOLTAR
+   Tokens oficiais: root.css e acessibilidade.css
+===================================================== */
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 18px;
+  background-color: rgba(13, 20, 36, 0.75);
+  color: var(--color-text, #F5F7FA);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-sm, 6px);
+  font-family: var(--font-main, "Montserrat", sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition:
+    background-color var(--transition-default, 0.25s ease),
+    border-color var(--transition-default, 0.25s ease),
+    color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease),
+    transform var(--transition-fast, 0.15s ease);
+}
+
+.btn-voltar:hover {
+  background-color: var(--color-card, #172238);
+  border-color: var(--color-primary-light, #78A9FF);
+  color: var(--color-white, #FFFFFF);
+  box-shadow: var(--shadow-card, 0 8px 24px rgba(0, 0, 0, 0.25));
+  transform: translateY(-1px);
+}
+
+.btn-voltar:active {
+  background-color: var(--color-surface, #121A2B);
+  transform: translateY(0);
+}
+
+.btn-voltar:focus-visible {
+  outline: 3px solid var(--color-primary-light, #78A9FF);
+  outline-offset: 3px;
+  border-color: var(--color-primary-light, #78A9FF);
+}
+
+/* Ícone de seta com animação sutil */
+.btn-voltar-icone {
+  display: inline-block;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast, 0.15s ease);
+}
+
+.btn-voltar:hover .btn-voltar-icone {
+  transform: translateX(-3px);
+}
+
+/* Variante para uso dentro dos cartões de login e cadastro */
+.btn-voltar-card {
+  align-self: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+/* Respeito a preferência por movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .btn-voltar,
+  .btn-voltar-icone {
+    transition: none !important;
+    transform: none !important;
+  }
+}

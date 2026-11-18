@@ -5,9 +5,9 @@
 {% block content %}
 <section class="section-padding section-surface">
     <div class="container">
-        <a href="{{ url_for('home') }}" class="btn btn-outline-light mb-4">
-            ← Voltar
-        </a>
+        {% set fallback_url = url_for('main.modalidade') %}
+        {% set classe_extra = 'mb-4' %}
+        {% include '_partials/btn_voltar.html' %}
 
         <div class="row align-items-center g-4">
             <div class="col-12 col-md-6">

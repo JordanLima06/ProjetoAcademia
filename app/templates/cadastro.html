@@ -10,9 +10,9 @@
 <div class="cadastro-main" id="conteudo" tabindex="-1">
     <section class="cadastro-section" aria-labelledby="titulo-cadastro">
 
-        <a class="voltar" href="{{ url_for('login') }}">
-            &larr; Voltar ao login
-        </a>
+        {% set fallback_url = url_for('auth.login') %}
+        {% set classe_extra = 'btn-voltar-card' %}
+        {% include '_partials/btn_voltar.html' %}
 
         <header class="cadastro-cabecalho">
             <h1 id="titulo-cadastro">Crie sua conta</h1>

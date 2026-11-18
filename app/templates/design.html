@@ -6,6 +6,10 @@
 <main class="ds-page">
     <section class="ds-hero">
         <div class="container">
+            {% set fallback_url = url_for('main.home') %}
+            {% set classe_extra = 'mb-3' %}
+            {% include '_partials/btn_voltar.html' %}
+
             <p class="eyebrow">Guia de interface</p>
             <h1>FightAcademy <span>Design System</span></h1>
             <p class="ds-lead">Uma linguagem visual consistente para tornar a experiência da academia clara, acessível e

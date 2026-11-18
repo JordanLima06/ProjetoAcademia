@@ -11,9 +11,9 @@
 <div class="pagina-login">
   <section class="login-section" aria-labelledby="titulo-login">
 
-    <a class="voltar" href="{{ url_for('home') }}">
-      &larr; Voltar ao início
-    </a>
+    {% set fallback_url = url_for('main.home') %}
+    {% set classe_extra = 'btn-voltar-card' %}
+    {% include '_partials/btn_voltar.html' %}
 
     <header class="login-cabecalho">
       <h1 id="titulo-login">Área do Aluno</h1>
