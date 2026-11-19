@@ -1,4 +1,4 @@
-﻿from typing import List, Optional
+from typing import List, Optional
 from app.models.academy import Plano, Modalidade
 from app.repositories.plan_repository import PlanRepository
 from app.repositories.modality_repository import ModalityRepository
@@ -21,3 +21,7 @@ class AcademyService:
     @classmethod
     def get_modality(cls, slug: str) -> Optional[Modalidade]:
         return ModalityRepository.get_by_slug(slug)
+
+    @classmethod
+    def get_modality_by_id(cls, modality_id: int) -> Optional[Modalidade]:
+        return ModalityRepository.get_by_id(modality_id)

@@ -1,4 +1,4 @@
-﻿import unittest
+import unittest
 from app import create_app
 from app.config import TestingConfig
 
@@ -50,6 +50,36 @@ class RoutesTestCase(unittest.TestCase):
     def test_design_page(self):
         response = self.client.get("/design")
         self.assertEqual(response.status_code, 200)
+
+    def test_aula_experimental_get(self):
+        response = self.client.get("/aula-experimental")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("AGENDE SUA AULA EXPERIMENTAL".encode("utf-8"), response.data)
+        self.assertIn(b"btn-voltar", response.data)
+
+    def test_aula_experimental_get_com_parametro(self):
+        response = self.client.get("/aula-experimental?modalidade=boxe")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'data-slug="boxe"', response.data)
+
+    def test_aula_experimental_post_sucesso(self):
+        response = self.client.post("/aula-experimental", data={
+            "nome": "Fernando Souza",
+            "telefone": "(82) 99321-1234",
+            "modalidade_id": "1",
+            "periodo_preferido": "noite"
+        }, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Solicitação Recebida".encode("utf-8"), response.data)
+
+    def test_aula_experimental_post_erro_repopula(self):
+        response = self.client.post("/aula-experimental", data={
+            "nome": "Nome Valido",
+            "telefone": "",  # Telefone vazio gera erro 400
+            "modalidade_id": "1"
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b"Nome Valido", response.data)
 
 if __name__ == "__main__":
     unittest.main()

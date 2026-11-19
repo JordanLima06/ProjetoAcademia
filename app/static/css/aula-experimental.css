@@ -1,0 +1,326 @@
+/* =====================================================
+   FIGHTACADEMY — MÓDULO AULA EXPERIMENTAL
+   Design System: root.css, acessibilidade.css
+===================================================== */
+
+/* Container Principal */
+.aula-main {
+  min-height: calc(100vh - 160px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 16px;
+  background: var(--gradient-background, linear-gradient(180deg, #080B12 0%, #0D1424 100%));
+  color: var(--color-text, #F5F7FA);
+  font-family: var(--font-main, "Montserrat", sans-serif);
+  box-sizing: border-box;
+}
+
+/* Card Centralizado */
+.aula-section {
+  width: 100%;
+  max-width: 760px;
+  padding: 40px;
+  background: var(--color-surface, #121A2B);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+/* Cabeçalho */
+.aula-cabecalho {
+  margin-bottom: 28px;
+}
+
+.aula-cabecalho h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.75rem, 4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text, #F5F7FA);
+  text-transform: uppercase;
+}
+
+.aula-cabecalho p {
+  margin: 0;
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Honeypot Invisível */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Formulário e Grid de Campos */
+.aula-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.aula-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-cheio {
+  grid-column: span 2;
+}
+
+.campo label {
+  color: var(--color-text, #F5F7FA);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.campo-obrigatorio {
+  color: var(--color-primary-light, #78A9FF);
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.campo-opcional {
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* Inputs, Selects e Textarea */
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--color-text, #F5F7FA);
+  background: var(--color-dark-blue, #0D1424);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease);
+}
+
+.campo input,
+.campo select {
+  min-height: 50px;
+}
+
+.campo textarea {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.campo select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A7B2C5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.campo select option {
+  background-color: var(--color-surface, #121A2B);
+  color: var(--color-text, #F5F7FA);
+  padding: 10px;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: var(--color-text-muted, #A7B2C5);
+  opacity: 0.8;
+}
+
+/* Foco e Validação Visual */
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: var(--color-primary, #1765ED);
+  box-shadow: 0 0 0 3px rgba(23, 101, 237, 0.25);
+  outline: none;
+}
+
+.campo input:focus-visible,
+.campo select:focus-visible,
+.campo textarea:focus-visible,
+.btn-agendar:focus-visible {
+  outline: 3px solid var(--color-primary-light, #78A9FF);
+  outline-offset: 2px;
+}
+
+.campo input[aria-invalid="true"],
+.campo select[aria-invalid="true"],
+.campo textarea[aria-invalid="true"] {
+  border-color: #FF737A;
+}
+
+/* Mensagens de Erro */
+.erro {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #FF737A;
+  min-height: 1.1em;
+}
+
+.mensagem {
+  margin: 0;
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Caixa de Aviso de Privacidade */
+.aviso-privacidade {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-dark-blue, #0D1424);
+  border-left: 3px solid var(--color-primary, #1765ED);
+  border-radius: var(--radius-sm, 6px);
+  color: var(--color-text-muted, #A7B2C5);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.aviso-icone {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.aviso-privacidade p {
+  margin: 0;
+}
+
+.aviso-privacidade strong {
+  color: var(--color-text, #F5F7FA);
+}
+
+/* Botão Principal "SOLICITAR AULA EXPERIMENTAL" */
+.btn-agendar {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  color: var(--color-white, #FFFFFF);
+  background: var(--color-primary, #1765ED);
+  border: 0;
+  border-radius: var(--radius-md, 10px);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(23, 101, 237, 0.35);
+  transition:
+    background-color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease),
+    transform var(--transition-fast, 0.15s ease);
+}
+
+.btn-agendar:hover:not(:disabled) {
+  background: var(--color-primary-hover, #0D53CC);
+  box-shadow: 0 6px 20px rgba(23, 101, 237, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-agendar:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-agendar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Card de Sucesso Pós-Envio */
+.card-sucesso {
+  background: var(--color-dark-blue, #0D1424);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-md, 12px);
+}
+
+.icone-sucesso {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(54, 201, 143, 0.15);
+  color: #36C98F;
+  border: 2px solid #36C98F;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.card-sucesso h2 {
+  color: var(--color-text, #F5F7FA);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Responsividade Mobile (1 Coluna) */
+@media (max-width: 768px) {
+  .aula-main {
+    padding: 24px 12px;
+    align-items: flex-start;
+  }
+
+  .aula-section {
+    padding: 28px 20px;
+    border-radius: var(--radius-md, 12px);
+  }
+
+  .aula-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .campo-cheio {
+    grid-column: span 1;
+  }
+
+  .aula-cabecalho h1 {
+    font-size: 1.55rem;
+  }
+}
+
+/* Preferência de Movimento Reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,222 @@
+{% extends "index.html" %}
+
+{% block title %}Aula Experimental | FightAcademy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/aula-experimental.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="aula-main" id="conteudo" tabindex="-1">
+    <section class="aula-section" aria-labelledby="titulo-aula">
+
+        {% set fallback_url = url_for('main.home') %}
+        {% set classe_extra = 'btn-voltar-card' %}
+        {% include '_partials/btn_voltar.html' %}
+
+        <header class="aula-cabecalho">
+            <h1 id="titulo-aula">AGENDE SUA AULA EXPERIMENTAL</h1>
+            <p>Venha treinar conosco sem compromisso. Nossa equipe entrará em contato pelo WhatsApp para confirmar seu horário.</p>
+        </header>
+
+        {# Mensagens de feedback do servidor #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} d-flex align-items-center mb-4" role="alert">
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if sucesso %}
+            <div class="card-sucesso text-center p-4">
+                <div class="icone-sucesso mb-3" aria-hidden="true">✓</div>
+                <h2>Solicitação Recebida!</h2>
+                <p class="text-secondary mt-2">
+                    Obrigado pelo interesse na FightAcademy. Em breve entraremos em contato pelo WhatsApp para alinhar os detalhes e confirmar sua aula.
+                </p>
+                <div class="mt-4">
+                    <a href="{{ url_for('main.home') }}" class="btn btn-accent">
+                        Voltar à Página Inicial
+                    </a>
+                </div>
+            </div>
+        {% else %}
+
+        <form id="aula-form"
+              class="aula-form"
+              method="POST"
+              action="{{ url_for('main.aula_experimental') }}"
+              novalidate
+              aria-describedby="aviso-privacidade">
+
+            {# Campo honeypot anti-spam invisível para humanos #}
+            <div class="hp-field" aria-hidden="true">
+                <label for="website_hp">Não preencha este campo</label>
+                <input type="text" id="website_hp" name="website_hp" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="aula-grid">
+                <!-- 1. Nome completo (obrigatório, col-12) -->
+                <div class="campo campo-cheio">
+                    <label for="nome">
+                        Nome completo <span class="campo-obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value="{{ dados.nome if dados else '' }}"
+                        placeholder="Digite seu nome completo"
+                        autocomplete="name"
+                        maxlength="100"
+                        required
+                        aria-required="true"
+                        aria-describedby="nome-erro"
+                    >
+                    <p class="erro" id="nome-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 2. WhatsApp (obrigatório, col-6) e E-mail (opcional, col-6) -->
+                <div class="campo">
+                    <label for="telefone">
+                        WhatsApp <span class="campo-obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        type="tel"
+                        id="telefone"
+                        name="telefone"
+                        value="{{ dados.telefone if dados else '' }}"
+                        placeholder="(00) 00000-0000"
+                        autocomplete="tel"
+                        inputmode="tel"
+                        maxlength="20"
+                        required
+                        aria-required="true"
+                        aria-describedby="telefone-erro"
+                    >
+                    <p class="erro" id="telefone-erro" aria-live="polite"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="email">
+                        E-mail <span class="campo-opcional">(opcional)</span>
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ dados.email if dados else '' }}"
+                        placeholder="seuemail@exemplo.com"
+                        autocomplete="email"
+                        inputmode="email"
+                        maxlength="150"
+                        aria-describedby="email-erro"
+                    >
+                    <p class="erro" id="email-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 3. Modalidade desejada (obrigatório, col-12) -->
+                <div class="campo campo-cheio">
+                    <label for="modalidade_id">
+                        Modalidade desejada <span class="campo-obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <select id="modalidade_id" 
+                            name="modalidade_id" 
+                            required 
+                            aria-required="true"
+                            aria-describedby="modalidade-erro">
+                        <option value="" disabled {% if not modalidade_param and (not dados or not dados.modalidade_id) %}selected{% endif %}>
+                            Selecione a modalidade
+                        </option>
+                        {% for m in modalidades %}
+                            <option value="{{ m.id }}" 
+                                    data-slug="{{ m.slug }}"
+                                    {% if (dados and dados.modalidade_id|string == m.id|string) or (not dados and modalidade_param and modalidade_param in [m.slug, m.id|string]) %}selected{% endif %}>
+                                {{ m.nome }}{% if m.tag %} ({{ m.tag }}){% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <p class="erro" id="modalidade-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 4. Melhor dia e Melhor período (col-6 cada) -->
+                <div class="campo">
+                    <label for="dia_preferido">
+                        Melhor dia para treinar <span class="campo-opcional">(preferência)</span>
+                    </label>
+                    <input
+                        type="date"
+                        id="dia_preferido"
+                        name="dia_preferido"
+                        value="{{ dados.dia_preferido if dados else '' }}"
+                        aria-describedby="dia-erro"
+                    >
+                    <p class="erro" id="dia-erro" aria-live="polite"></p>
+                </div>
+
+                <div class="campo">
+                    <label for="periodo_preferido">
+                        Melhor período <span class="campo-opcional">(preferência)</span>
+                    </label>
+                    <select id="periodo_preferido" name="periodo_preferido" aria-describedby="periodo-erro">
+                        <option value="" {% if not dados or not dados.periodo_preferido %}selected{% endif %}>
+                            Selecione um período
+                        </option>
+                        <option value="manha" {% if dados and dados.periodo_preferido == 'manha' %}selected{% endif %}>
+                            Manhã (06h às 12h)
+                        </option>
+                        <option value="tarde" {% if dados and dados.periodo_preferido == 'tarde' %}selected{% endif %}>
+                            Tarde (12h às 18h)
+                        </option>
+                        <option value="noite" {% if dados and dados.periodo_preferido == 'noite' %}selected{% endif %}>
+                            Noite (18h às 22h)
+                        </option>
+                    </select>
+                    <p class="erro" id="periodo-erro" aria-live="polite"></p>
+                </div>
+
+                <!-- 5. Objetivo pessoal (opcional, col-12) -->
+                <div class="campo campo-cheio">
+                    <label for="objetivo">
+                        Objetivo pessoal <span class="campo-opcional">(opcional)</span>
+                    </label>
+                    <textarea
+                        id="objetivo"
+                        name="objetivo"
+                        rows="2"
+                        maxlength="255"
+                        placeholder="Ex: Perda de peso, defesa pessoal, ganho de força, condicionamento..."
+                        aria-describedby="objetivo-erro"
+                    >{{ dados.objetivo if dados else '' }}</textarea>
+                    <p class="erro" id="objetivo-erro" aria-live="polite"></p>
+                </div>
+            </div>
+
+            <!-- Aviso de Privacidade e Contato -->
+            <div class="aviso-privacidade" id="aviso-privacidade">
+                <span class="aviso-icone" aria-hidden="true">🔒</span>
+                <p>
+                    <strong>Privacidade:</strong> Seus dados serão utilizados exclusivamente pela equipe do FightAcademy para entrar em contato via WhatsApp e alinhar o agendamento da sua aula. Não enviamos spam.
+                </p>
+            </div>
+
+            <!-- Status dinâmico -->
+            <p class="mensagem" id="aula-status" role="status" aria-live="polite"></p>
+
+            <!-- 6. Botão principal -->
+            <button class="btn-agendar" id="btn-submit" type="submit">
+                SOLICITAR AULA EXPERIMENTAL
+            </button>
+        </form>
+        {% endif %}
+
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/aula-experimental.js') }}" defer></script>
+{% endblock %}

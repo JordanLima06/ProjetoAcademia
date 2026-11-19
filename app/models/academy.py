@@ -1,5 +1,5 @@
-﻿from dataclasses import dataclass
-from typing import List, Any
+from dataclasses import dataclass
+from typing import List, Any, Optional
 
 @dataclass
 class Plano:
@@ -26,17 +26,21 @@ class Modalidade:
     slug: str
     nome: str
     descricao: str
-    imagem: str
-    tag: str
+    imagem: str = ""
+    tag: str = ""
+    id: Optional[int] = None
+    ativo: bool = True
 
     def __getitem__(self, item: str) -> Any:
         return getattr(self, item)
 
     def to_dict(self):
         return {
+            "id": self.id,
             "slug": self.slug,
             "nome": self.nome,
             "descricao": self.descricao,
             "imagem": self.imagem,
-            "tag": self.tag
+            "tag": self.tag,
+            "ativo": self.ativo
         }
