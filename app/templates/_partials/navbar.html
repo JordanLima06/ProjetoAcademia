@@ -12,10 +12,21 @@
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('listar_planos') }}">Planos</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('sobre') }}">Sobre nós</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('modalidade') }}">Modalidades</a></li>
+                {% if session.get('user_id') and session.get('user_tipo') == 'aluno' %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('enrollment.minha_matricula') }}">Minha Matrícula</a></li>
+                <li class="nav-item mt-2 mt-lg-0">
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.logout') }}">Sair</a>
+                </li>
+                {% elif session.get('user_id') %}
+                <li class="nav-item mt-2 mt-lg-0">
+                    <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.logout') }}">Sair</a>
+                </li>
+                {% else %}
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('cadastro') }}">Matricule-se</a></li>
                 <li class="nav-item mt-2 mt-lg-0">
                     <a class="btn btn-accent" href="{{ url_for('login') }}">Sou aluno</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>

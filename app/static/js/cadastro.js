@@ -170,12 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
      5. Envio do Formulário (Validação Completa)
   ----------------------------------------------------------- */
   form.addEventListener("submit", (evento) => {
-    evento.preventDefault();
-
     const resultados = campos.map(validar);
     const primeiroErro = resultados.indexOf(false);
 
     if (primeiroErro !== -1) {
+      evento.preventDefault();
       if (statusCadastro) {
         statusCadastro.textContent = "Existem campos que precisam ser corrigidos.";
       }
@@ -183,10 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (statusCadastro) {
-      statusCadastro.textContent =
-        "Dados validados. Este cadastro é demonstrativo: nenhuma conta foi criada ou dado foi salvo.";
-    }
+    // Formulário validado com sucesso: prossegue com a submissão para o Flask
   });
 
   /* -----------------------------------------------------------

@@ -19,6 +19,17 @@
             <p>Preencha seus dados para começar sua jornada.</p>
         </header>
 
+        {# Mensagens de feedback do servidor #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }} d-flex align-items-center mb-3" role="alert">
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         {% set plano_param = request.args.get('plano', '') %}
         {% set modalidade_param = request.args.get('modalidade', '') %}
 
@@ -29,9 +40,7 @@
               novalidate
               aria-describedby="aviso-demo">
 
-            <p class="aviso-demo" id="aviso-demo">
-                Cadastro demonstrativo: nenhuma conta será criada ou salva.
-            </p>
+           
 
             <div class="cadastro-grid">
                 <!-- 1. Nome completo -->

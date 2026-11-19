@@ -1,0 +1,234 @@
+{% extends "index.html" %}
+
+{% block title %}Contratar {{ plano.nome }} | FightAcademy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/planos.css') }}">
+<style>
+.contratar-container {
+    max-width: 900px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+}
+.card-contratar {
+    background-color: var(--surface, #121A2B);
+    border: 1px solid rgba(120, 169, 255, 0.15);
+    border-radius: 12px;
+    padding: 32px;
+    color: var(--text, #F5F7FA);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.alerta-demo {
+    background: rgba(23, 101, 237, 0.12);
+    border: 1px solid var(--primary, #1765ED);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    color: var(--text, #F5F7FA);
+}
+.alerta-demo strong {
+    color: var(--light, #78A9FF);
+}
+.secao-titulo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text, #F5F7FA);
+    margin-top: 24px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 8px;
+}
+.opcao-card {
+    background: var(--card, #172238);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.opcao-card:hover {
+    border-color: var(--primary, #1765ED);
+    background: rgba(23, 101, 237, 0.08);
+}
+.opcao-card input[type="radio"] {
+    accent-color: var(--primary, #1765ED);
+    width: 20px;
+    height: 20px;
+}
+.badge-modalidade {
+    background: rgba(23, 101, 237, 0.2);
+    color: var(--light, #78A9FF);
+    border: 1px solid rgba(120, 169, 255, 0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+.btn-contratar {
+    background-color: var(--primary, #1765ED);
+    color: #fff;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    margin-top: 24px;
+    transition: background-color 0.2s;
+    font-size: 1.1rem;
+}
+.btn-contratar:hover {
+    background-color: var(--hover, #0D53CC);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contratar-container">
+    {% set fallback_url = url_for('main.listar_planos') %}
+    {% set classe_extra = 'mb-4' %}
+    {% include '_partials/btn_voltar.html' %}
+
+    {# Mensagens Flash #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }} mb-4" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card-contratar">
+        <header class="mb-4">
+            <span class="text-uppercase tracking-wider" style="color: var(--light, #78A9FF); font-weight: 600; font-size: 0.85rem;">
+                Contratação de Matrícula
+            </span>
+            <h1 class="h2 fw-bold mt-1 mb-2">{{ plano.nome }}</h1>
+            <p class="text-muted mb-0" style="color: var(--muted, #A7B2C5);">
+                Revise as modalidades liberadas, selecione a condição comercial e confirme a simulação.
+            </p>
+        </header>
+
+        <!-- Banner de Simulação Demonstrativa -->
+        <div class="alerta-demo" role="alert">
+            <div class="d-flex align-items-center gap-3">
+                <span style="font-size: 1.5rem;" aria-hidden="true">ℹ️</span>
+                <div>
+                    <strong>Simulação Demonstrativa:</strong> Este sistema opera em modo de demonstração.
+                    Nenhum pagamento real será cobrado e nenhuma informação bancária confidencial é solicitada.
+                </div>
+            </div>
+        </div>
+
+        <!-- Modalidades Inclusas no Plano -->
+        <div class="mb-4">
+            <h2 class="secao-titulo">Modalidades Liberadas neste Plano</h2>
+            {% if modalidades %}
+                <div class="d-flex flex-wrap gap-2">
+                    {% for m in modalidades %}
+                        <span class="badge-modalidade">{{ m.nome }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted" style="color: var(--muted, #A7B2C5);">Acesso livre à infraestrutura da FightAcademy.</p>
+            {% endif %}
+        </div>
+
+        <!-- Benefícios Inclusos -->
+        {% if plano.beneficios %}
+        <div class="mb-4">
+            <h2 class="secao-titulo">Benefícios Inclusos</h2>
+            <ul class="list-unstyled mb-0">
+                {% for b in plano.beneficios %}
+                <li class="d-flex align-items-center gap-2 mb-2">
+                    <span style="color: var(--light, #78A9FF); font-weight: bold;">✓</span>
+                    <span>{{ b }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Formulário de Contratação -->
+        <form method="POST" action="{{ url_for('enrollment.processar_contratacao', plano_slug=plano.slug) }}" novalidate>
+            <h2 class="secao-titulo">1. Selecione a Condição Comercial</h2>
+            {% if opcoes_pagamento %}
+                <div class="opcoes-cobranca mb-4">
+                    {% for op in opcoes_pagamento %}
+                    <label class="opcao-card" for="opcao_{{ op.id }}">
+                        <input type="radio"
+                               name="opcao_pagamento_id"
+                               id="opcao_{{ op.id }}"
+                               value="{{ op.id }}"
+                               {% if loop.first %}checked{% endif %}
+                               required>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">{{ op.nome }}</div>
+                            <div class="small" style="color: var(--muted, #A7B2C5);">
+                                {% if op.quantidade_parcelas and op.quantidade_parcelas > 1 %}
+                                    {{ op.quantidade_parcelas }}x sem juros no cartão de crédito
+                                    {% if op.valor_total_contratado %}
+                                        (Total de R$ {{ "%.2f"|format(op.valor_total_contratado)|replace(".", ",") }})
+                                    {% endif %}
+                                {% else %}
+                                    Cobrança {{ op.periodicidade }}
+                                    {% if op.valor_total_contratado %}
+                                        - Total: R$ {{ "%.2f"|format(op.valor_total_contratado)|replace(".", ",") }}
+                                    {% else %}
+                                        - R$ {{ "%.2f"|format(op.valor_cobranca)|replace(".", ",") }}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="text-end fw-bold" style="color: var(--light, #78A9FF); font-size: 1.15rem;">
+                            R$ {{ "%.2f"|format(op.valor_cobranca)|replace(".", ",") }}
+                            {% if op.quantidade_parcelas and op.quantidade_parcelas > 1 %}
+                                <span class="small" style="font-size: 0.75rem; color: var(--muted, #A7B2C5);">/parc</span>
+                            {% else %}
+                                <span class="small" style="font-size: 0.75rem; color: var(--muted, #A7B2C5);">/mês</span>
+                            {% endif %}
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">Valor padrão do plano: R$ {{ "%.2f"|format(plano.preco)|replace(".", ",") }}</p>
+            {% endif %}
+
+            <h2 class="secao-titulo">2. Forma de Pagamento (Demonstrativa)</h2>
+            <div class="formas-pagamento mb-4">
+                {% for fp in formas_pagamento %}
+                <label class="opcao-card" for="fp_{{ fp.codigo }}">
+                    <input type="radio"
+                           name="forma_pagamento"
+                           id="fp_{{ fp.codigo }}"
+                           value="{{ fp.codigo }}"
+                           {% if loop.first %}checked{% endif %}
+                           required>
+                    <div class="fw-bold">{{ fp.nome }}</div>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="form-check mt-3 mb-3">
+                <input class="form-check-input" type="checkbox" id="concordo_demo" required checked>
+                <label class="form-check-label small" for="concordo_demo" style="color: var(--muted, #A7B2C5);">
+                    Estou ciente de que esta é uma simulação demonstrativa do sistema FightAcademy e que nenhuma transação financeira real ocorrerá.
+                </label>
+            </div>
+
+            <button type="submit" class="btn-contratar">
+                Confirmar Contratação Demonstrativa
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

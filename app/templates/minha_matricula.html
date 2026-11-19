@@ -1,0 +1,286 @@
+{% extends "index.html" %}
+
+{% block title %}Minha Matrícula | FightAcademy{% endblock %}
+
+{% block extra_css %}
+<style>
+.matricula-container {
+    max-width: 1000px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+}
+.card-painel {
+    background-color: var(--surface, #121A2B);
+    border: 1px solid rgba(120, 169, 255, 0.15);
+    border-radius: 12px;
+    padding: 32px;
+    color: var(--text, #F5F7FA);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    margin-bottom: 28px;
+}
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+.status-ativa {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #4cd964;
+    border: 1px solid rgba(76, 217, 100, 0.3);
+}
+.status-cancelada {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+.status-pendente {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+.badge-modalidade {
+    background: rgba(23, 101, 237, 0.2);
+    color: var(--light, #78A9FF);
+    border: 1px solid rgba(120, 169, 255, 0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.tabela-pagamentos {
+    width: 100%;
+    color: var(--text, #F5F7FA);
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+.tabela-pagamentos th {
+    color: var(--muted, #A7B2C5);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+}
+.tabela-pagamentos td {
+    background: var(--card, #172238);
+    padding: 14px 16px;
+    vertical-align: middle;
+}
+.tabela-pagamentos tr td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.tabela-pagamentos tr td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.btn-cancelar-matricula {
+    background: transparent;
+    border: 1px solid #dc3545;
+    color: #ff6b6b;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+.btn-cancelar-matricula:hover {
+    background: #dc3545;
+    color: #fff;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="matricula-container">
+    {% set fallback_url = url_for('main.home') %}
+    {% set classe_extra = 'mb-4' %}
+    {% include '_partials/btn_voltar.html' %}
+
+    {# Mensagens Flash #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }} mb-4" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if matricula %}
+        <!-- Card da Matrícula Ativa -->
+        <div class="card-painel">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                    <span class="text-uppercase" style="color: var(--light, #78A9FF); font-weight: 600; font-size: 0.85rem;">
+                        Matrícula Ativa #{{ matricula.id }}
+                    </span>
+                    <h1 class="h2 fw-bold mb-1">{{ matricula.plano.nome if matricula.plano else 'Plano FightAcademy' }}</h1>
+                    <p class="text-muted mb-0" style="color: var(--muted, #A7B2C5);">
+                        Aluno: {{ g.user.nome }}
+                    </p>
+                </div>
+                <div>
+                    <span class="status-badge status-{{ matricula.status }}">{{ matricula.status }}</span>
+                </div>
+            </div>
+
+            <!-- Dados da Vigência e Valores -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="p-3 rounded" style="background: var(--card, #172238);">
+                        <div class="small" style="color: var(--muted, #A7B2C5);">Data de Início</div>
+                        <div class="fw-bold fs-6 mt-1">{{ matricula.data_inicio.strftime('%d/%m/%Y') if matricula.data_inicio else '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-3 rounded" style="background: var(--card, #172238);">
+                        <div class="small" style="color: var(--muted, #A7B2C5);">Data de Término</div>
+                        <div class="fw-bold fs-6 mt-1">{{ matricula.data_fim.strftime('%d/%m/%Y') if matricula.data_fim else '-' }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-3 rounded" style="background: var(--card, #172238);">
+                        <div class="small" style="color: var(--muted, #A7B2C5);">Condição Contratada</div>
+                        <div class="fw-bold fs-6 mt-1">
+                            {{ matricula.quantidade_parcelas }}x de R$ {{ "%.2f"|format(matricula.valor_cobranca)|replace(".", ",") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-3 rounded" style="background: var(--card, #172238);">
+                        <div class="small" style="color: var(--muted, #A7B2C5);">Valor Total</div>
+                        <div class="fw-bold fs-6 mt-1" style="color: var(--light, #78A9FF);">
+                            R$ {{ "%.2f"|format(matricula.valor_total_contratado)|replace(".", ",") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modalidades Liberadas -->
+            <div class="mb-4">
+                <h2 class="h5 fw-bold mb-3">Modalidades Liberadas</h2>
+                {% if matricula.modalidades %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for m in matricula.modalidades %}
+                            <span class="badge-modalidade">{{ m.nome }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted" style="color: var(--muted, #A7B2C5);">Acesso livre a todas as atividades da FightAcademy.</p>
+                {% endif %}
+            </div>
+
+            <!-- Botão de Cancelamento -->
+            <div class="border-top pt-3 mt-4 d-flex justify-content-end">
+                <form method="POST" action="{{ url_for('enrollment.cancelar_matricula') }}" onsubmit="return confirm('Tem certeza que deseja cancelar sua matrícula ativa?');">
+                    <input type="hidden" name="matricula_id" value="{{ matricula.id }}">
+                    <button type="submit" class="btn-cancelar-matricula">
+                        Cancelar Matrícula
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Card de Pagamentos Demonstrativos Registrados -->
+        <div class="card-painel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 fw-bold mb-0">Parcelas e Registros de Pagamento</h2>
+                <span class="badge bg-secondary">Simulação Demonstrativa</span>
+            </div>
+            <p class="small text-muted mb-4" style="color: var(--muted, #A7B2C5);">
+                Registros gerados na tabela de pagamentos para controle demonstrativo de vencimentos.
+            </p>
+
+            {% if pagamentos %}
+                <div class="table-responsive">
+                    <table class="tabela-pagamentos">
+                        <thead>
+                            <tr>
+                                <th>Parcela</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Forma</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in pagamentos %}
+                            <tr>
+                                <td class="fw-bold">{{ p.numero_parcela }} de {{ matricula.quantidade_parcelas }}</td>
+                                <td>{{ p.vencimento.strftime('%d/%m/%Y') if p.vencimento else '-' }}</td>
+                                <td class="fw-bold" style="color: var(--light, #78A9FF);">
+                                    R$ {{ "%.2f"|format(p.valor)|replace(".", ",") }}
+                                </td>
+                                <td>
+                                    <span class="text-uppercase small">{{ p.forma_pagamento|replace('_', ' ') }}</span>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-{{ p.status }} small">
+                                        {{ p.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">Nenhum registro de parcela localizado.</p>
+            {% endif %}
+        </div>
+
+    {% else %}
+        <!-- Caso sem matrícula ativa -->
+        <div class="card-painel text-center py-5">
+            <div class="mb-3" style="font-size: 3rem;">🥋</div>
+            <h1 class="h3 fw-bold mb-2">Você ainda não possui uma matrícula ativa</h1>
+            <p class="text-muted mb-4" style="color: var(--muted, #A7B2C5); max-width: 500px; margin: 0 auto;">
+                Explore nossos planos e escolha a melhor opção para iniciar seus treinos na FightAcademy.
+            </p>
+            <a href="{{ url_for('main.listar_planos') }}" class="btn btn-primary px-4 py-2 fw-bold" style="background-color: var(--primary, #1765ED); border: none;">
+                Conhecer Planos
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Histórico de Matrículas Anteriores -->
+    {% if historico and (historico|length > 1 or (not matricula and historico|length > 0)) %}
+    <div class="card-painel">
+        <h2 class="h5 fw-bold mb-3">Histórico de Matrículas</h2>
+        <div class="table-responsive">
+            <table class="tabela-pagamentos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Plano</th>
+                        <th>Período</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in historico %}
+                    <tr>
+                        <td>#{{ h.id }}</td>
+                        <td class="fw-bold">{{ h.plano.nome if h.plano else 'Plano' }}</td>
+                        <td>{{ h.data_inicio.strftime('%d/%m/%Y') if h.data_inicio else '-' }} a {{ h.data_fim.strftime('%d/%m/%Y') if h.data_fim else '-' }}</td>
+                        <td>R$ {{ "%.2f"|format(h.valor_total_contratado)|replace(".", ",") if h.valor_total_contratado else '-' }}</td>
+                        <td>
+                            <span class="status-badge status-{{ h.status }} small">{{ h.status }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

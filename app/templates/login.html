@@ -20,6 +20,17 @@
       <p>Entre com seu e-mail e senha para continuar.</p>
     </header>
 
+    {# Mensagens de feedback do servidor #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }} d-flex align-items-center mb-3" role="alert">
+            <div>{{ message }}</div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <!-- Formulário principal de login -->
     <form
       class="login-form"
@@ -159,7 +170,7 @@
       <form
         id="recuperar-form"
         method="POST"
-        action="{{ url_for('home') }}"
+        action="{{ url_for('auth.solicitar_recuperacao') }}"
       >
         <div class="campo">
           <label for="recuperar-email">E-mail</label>

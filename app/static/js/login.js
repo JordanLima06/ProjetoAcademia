@@ -60,14 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Validação demonstrativa do login.
+  // Validação e envio do login.
   form.addEventListener("submit", (evento) => {
-    evento.preventDefault();
-
     const emailOk = validar(email, "email-erro");
     const senhaOk = validar(senha, "senha-erro");
 
     if (!emailOk || !senhaOk) {
+      evento.preventDefault();
       if (statusLogin) {
         statusLogin.textContent =
           "Confira os campos indicados antes de continuar.";
@@ -77,26 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!entrar) return;
-
-    entrar.disabled = true;
-    entrar.textContent = "Verificando…";
-    form.setAttribute("aria-busy", "true");
-
-    if (statusLogin) {
-      statusLogin.textContent = "Verificando o preenchimento…";
-    }
-
-    window.setTimeout(() => {
-      if (statusLogin) {
-        statusLogin.textContent =
-          "Preenchimento válido. Nenhuma conta foi autenticada.";
-      }
-
-      entrar.disabled = false;
-      entrar.textContent = "Entrar";
-      form.removeAttribute("aria-busy");
-    }, 700);
+    // Formulário validado com sucesso: prossegue com o envio HTTP para o Flask
   });
 
   // Recuperação de senha demonstrativa.
@@ -132,22 +112,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (recuperarForm && recuperarEmail) {
-    recuperarForm.noValidate = true;
-
     recuperarForm.addEventListener("submit", (evento) => {
-      evento.preventDefault();
-
       if (!validar(recuperarEmail, "recuperar-erro")) {
+        evento.preventDefault();
         recuperarEmail.focus();
         return;
       }
-
-      const status = document.getElementById("recuperar-status");
-
-      if (status) {
-        status.textContent =
-          "Solicitação simulada. Nenhum e-mail foi enviado.";
-      }
+      // Formulário validado: envia requisição para a rota Flask
     });
   }
 

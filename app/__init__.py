@@ -1,4 +1,4 @@
-﻿from flask import Flask, url_for
+from flask import Flask, url_for
 from werkzeug.routing import BuildError
 from app.config import DevelopmentConfig
 from app import db
@@ -34,7 +34,7 @@ def create_app(config_class=DevelopmentConfig):
             try:
                 return url_for(endpoint, **values)
             except BuildError:
-                for bp in ["main", "auth"]:
+                for bp in ["main", "auth", "enrollment"]:
                     try:
                         return url_for(f"{bp}.{endpoint}", **values)
                     except BuildError:

@@ -69,9 +69,19 @@
                         </ul>
                         {% endif %}
 
+                        {% if session.get('user_id') and session.get('user_tipo') == 'aluno' %}
+                        <a class="botao-plano" href="{{ url_for('enrollment.contratar', plano_slug=plano.slug) }}">
+                            Quero este plano
+                        </a>
+                        {% elif session.get('user_id') %}
+                        <button class="botao-plano" disabled style="opacity: 0.6; cursor: not-allowed;" title="Apenas contas de alunos podem contratar planos">
+                            Exclusivo para alunos
+                        </button>
+                        {% else %}
                         <a class="botao-plano" href="{{ url_for('auth.cadastro', plano=plano.slug) }}">
                             Quero este plano
                         </a>
+                        {% endif %}
                     </div>
 
                 </article>
@@ -87,9 +97,15 @@
                     </p>
                 </div>
 
+                {% if session.get('user_id') and session.get('user_tipo') == 'aluno' %}
+                <a class="botao-plano botao-cta-plano" href="{{ url_for('enrollment.minha_matricula') }}">
+                    Minha Matrícula
+                </a>
+                {% elif not session.get('user_id') %}
                 <a class="botao-plano botao-cta-plano" href="{{ url_for('auth.cadastro') }}">
                     Fazer cadastro
                 </a>
+                {% endif %}
             </section>
 
         </div>

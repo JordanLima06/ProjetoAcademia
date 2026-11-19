@@ -1,42 +1,58 @@
-﻿import os
 import logging
-from flask import g, current_app
+from flask import g, current_app, has_app_context
+from app.config import Config
 
 logger = logging.getLogger(__name__)
 
+def _get_config_value(key: str, default=None):
+    """Recupera valor de configuração de forma segura com fallback para app.config.Config."""
+    if has_app_context() and current_app:
+        return current_app.config.get(key, getattr(Config, key, default))
+    return getattr(Config, key, default)
+
 def get_db_connection():
     """
-    Retorna uma conexão ativa com o banco PostgreSQL no contexto da requisição (g.db).
-    Caso psycopg2 não esteja instalado ou o banco esteja inacessível, retorna None ou lança erro amigável.
+    Retorna uma conexão ativa com o banco PostgreSQL no contexto da requisição (g.db)
+    ou uma nova conexão quando fora do contexto web.
+    Utiliza as configurações centralizadas de app.config.Config, sem duplicar credenciais.
     """
-    if "db" not in g:
-        try:
-            import psycopg2
-            from psycopg2.extras import RealDictCursor
+    in_context = has_app_context()
 
-            conn = psycopg2.connect(
-                host=current_app.config.get("DB_HOST", "localhost"),
-                port=current_app.config.get("DB_PORT", "5432"),
-                dbname=current_app.config.get("DB_NAME", "fightacademy_db"),
-                user=current_app.config.get("DB_USER", "postgres"),
-                password=current_app.config.get("DB_PASSWORD", "postgres"),
-                cursor_factory=RealDictCursor
-            )
+    if in_context and "db" in g:
+        return g.db
+
+    try:
+        import psycopg2
+        from psycopg2.extras import RealDictCursor
+
+        conn = psycopg2.connect(
+            host=_get_config_value("DB_HOST", Config.DB_HOST),
+            port=_get_config_value("DB_PORT", Config.DB_PORT),
+            dbname=_get_config_value("DB_NAME", Config.DB_NAME),
+            user=_get_config_value("DB_USER", Config.DB_USER),
+            password=_get_config_value("DB_PASSWORD", Config.DB_PASSWORD),
+            cursor_factory=RealDictCursor
+        )
+
+        if in_context:
             g.db = conn
-        except ImportError:
-            logger.warning("psycopg2 não está instalado. Instale com 'pip install psycopg2-binary' para persistência PostgreSQL.")
-            g.db = None
-        except Exception as e:
-            logger.error(f"Erro ao conectar ao PostgreSQL: {e}")
-            g.db = None
-
-    return g.db
+        return conn
+    except ImportError:
+        logger.error("psycopg2 não está instalado. Instale psycopg2-binary para conexão com PostgreSQL.")
+        return None
+    except Exception as e:
+        logger.error(f"Erro ao conectar ao PostgreSQL no banco '{_get_config_value('DB_NAME', Config.DB_NAME)}': {e}")
+        return None
 
 def close_db(e=None):
     """Fecha a conexão com o banco ao finalizar o contexto da requisição."""
-    db = g.pop("db", None)
-    if db is not None:
-        db.close()
+    if has_app_context():
+        db = g.pop("db", None)
+        if db is not None:
+            try:
+                db.close()
+            except Exception as close_err:
+                logger.warning(f"Erro ao fechar conexão com o banco: {close_err}")
 
 def init_app(app):
     """Registra funções de ciclo de vida do banco no aplicativo Flask."""
