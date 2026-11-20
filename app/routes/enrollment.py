@@ -116,16 +116,16 @@ def minha_matricula():
         flash("Perfil de aluno não localizado.", "danger")
         return redirect(url_for("main.home"))
 
-    matricula_ativa = EnrollmentService.obter_matricula_ativa(aluno.id)
+    matricula_atual = EnrollmentService.obter_matricula_atual(aluno.id)
     pagamentos = []
-    if matricula_ativa:
-        pagamentos = PaymentService.listar_pagamentos_por_matricula(matricula_ativa.id)
+    if matricula_atual:
+        pagamentos = PaymentService.listar_pagamentos_por_matricula(matricula_atual.id)
 
     historico = EnrollmentService.obter_historico_matriculas(aluno.id)
 
     return render_template(
         "minha_matricula.html",
-        matricula=matricula_ativa,
+        matricula=matricula_atual,
         pagamentos=pagamentos,
         historico=historico,
         aluno=aluno
