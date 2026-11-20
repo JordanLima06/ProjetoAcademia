@@ -2,6 +2,7 @@ import hmac
 import logging
 from functools import wraps
 from flask import session, redirect, url_for, flash, abort, g, request
+from flask_wtf.csrf import generate_csrf
 from app.repositories.user_repository import (
     UserRepository,
     DatabaseError,
@@ -11,6 +12,12 @@ from app.repositories.user_repository import (
 from app.services.auth_service import AuthService
 
 logger = logging.getLogger(__name__)
+
+def _clear_auth_session():
+    """Limpa credenciais da sessão e regenera um token CSRF seguro para a nova sessão anônima."""
+    session.clear()
+    g.pop("csrf_token", None)
+    generate_csrf()
 
 def login_required(f):
     """
@@ -41,13 +48,13 @@ def login_required(f):
 
         # Usuário inexistente
         if user is None:
-            session.clear()
+            _clear_auth_session()
             flash("Sua conta não foi encontrada ou a sessão expirou. Faça login novamente.", "warning")
             return redirect(url_for("auth.login"))
 
         # Usuário inativo
         if not user.ativo:
-            session.clear()
+            _clear_auth_session()
             flash("Sua conta está desativada. Entre em contato com a academia.", "danger")
             return redirect(url_for("auth.login"))
 
@@ -55,7 +62,7 @@ def login_required(f):
         auth_fp = session.get("auth_fingerprint")
         current_fp = AuthService.get_password_fingerprint(user.senha)
         if not auth_fp or not isinstance(auth_fp, str) or not hmac.compare_digest(auth_fp, current_fp):
-            session.clear()
+            _clear_auth_session()
             flash("Sua senha foi alterada recentemente ou sua sessão expirou. Faça login novamente.", "warning")
             return redirect(url_for("auth.login"))
 
@@ -89,19 +96,19 @@ def role_required(*allowed_roles):
                     return "Erro interno do servidor ao processar autenticação. Tente novamente mais tarde.", 500
 
                 if user is None:
-                    session.clear()
+                    _clear_auth_session()
                     flash("Sua conta não foi encontrada ou a sessão expirou. Faça login novamente.", "warning")
                     return redirect(url_for("auth.login"))
 
                 if not user.ativo:
-                    session.clear()
+                    _clear_auth_session()
                     flash("Sua conta está desativada. Faça login novamente.", "danger")
                     return redirect(url_for("auth.login"))
 
                 auth_fp = session.get("auth_fingerprint")
                 current_fp = AuthService.get_password_fingerprint(user.senha)
                 if not auth_fp or not isinstance(auth_fp, str) or not hmac.compare_digest(auth_fp, current_fp):
-                    session.clear()
+                    _clear_auth_session()
                     flash("Sua senha foi alterada recentemente ou sua sessão expirou. Faça login novamente.", "warning")
                     return redirect(url_for("auth.login"))
 

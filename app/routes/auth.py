@@ -1,5 +1,6 @@
 import logging
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, g
+from flask_wtf.csrf import generate_csrf
 from app.services.auth_service import AuthService
 from app.services.academy_service import AcademyService
 
@@ -23,6 +24,8 @@ def login():
             session["user_email"] = usuario.email
             session["user_tipo"] = usuario.tipo
             session["auth_fingerprint"] = AuthService.get_password_fingerprint(usuario.senha)
+            g.pop("csrf_token", None)
+            generate_csrf()
 
             flash(mensagem, "success")
             next_url = request.args.get("next")
@@ -78,6 +81,8 @@ def cadastro():
 def logout():
     """Encerra a sessão atual com limpeza completa via POST protegido por CSRF."""
     session.clear()
+    g.pop("csrf_token", None)
+    generate_csrf()
     flash("Você saiu da sua conta.", "info")
     return redirect(url_for("main.home"))
 

@@ -410,6 +410,116 @@ class CSRFAndSessionSecurityTestCase(unittest.TestCase):
         with self.client.session_transaction() as sess:
             self.assertNotIn("user_id", sess)
 
+    # -------------------------------------------------------------
+    # 5. TESTES COMPLEMENTARES DE DIAGNÓSTICO E CORREÇÃO CSRF NO LOGOUT
+    # -------------------------------------------------------------
+
+    def test_17_logout_post_com_csrf_invalido_rejeitado_400(self):
+        """Valida que POST /logout com token CSRF adulterado/inválido retorna 400 e mantém sessão."""
+        self._login_client(self.client, self.user_aluno)
+        # Garante sessão inicializada
+        self.client.get("/aluno/painel")
+
+        res = self.client.post("/logout", data={"csrf_token": "token-falso-adulterado"})
+        self.assertEqual(res.status_code, 400)
+        self.assertIn("The CSRF token is invalid", res.get_data(as_text=True))
+
+        # A sessão continua intacta
+        with self.client.session_transaction() as sess:
+            self.assertEqual(sess.get("user_id"), 1)
+
+    def test_18_csrf_token_na_sessao_imediatamente_apos_login_302(self):
+        """Valida que POST /login re-semeia o token CSRF na sessão no momento do redirect 302."""
+        token = get_csrf_token(self.client, self.app)
+        res = self.client.post("/login", data={
+            "email": "rodrigo@teste.com",
+            "senha": "SenhaInicial123",
+            "csrf_token": token
+        }, follow_redirects=False)
+
+        self.assertEqual(res.status_code, 302)
+        with self.client.session_transaction() as sess:
+            self.assertEqual(sess.get("user_id"), 1)
+            self.assertIn("csrf_token", sess)
+            self.assertTrue(len(sess["csrf_token"]) > 0)
+            self.assertIn("auth_fingerprint", sess)
+
+    def test_19_fluxo_completo_real_login_e_logout_sem_erro_session_token_missing(self):
+        """
+        Valida o fluxo completo de ponta a ponta sem injeção manual de sessão:
+        1. GET /login obtém token CSRF do formulário.
+        2. POST /login autentica e redireciona.
+        3. GET / (ou painel) obtém o token CSRF renderizado no botão Sair da navbar.
+        4. POST /logout com esse token encerra com sucesso (302) sem erro 'CSRF session token missing'.
+        """
+        # 1. GET /login
+        res_login_page = self.client.get("/login")
+        self.assertEqual(res_login_page.status_code, 200)
+        m = re.search(r'name="csrf_token"\s+value="([^"]+)"', res_login_page.get_data(as_text=True))
+        self.assertIsNotNone(m, "Campo csrf_token não encontrado no HTML de login")
+        csrf_login = m.group(1)
+
+        # 2. POST /login
+        res_login = self.client.post("/login", data={
+            "email": "rodrigo@teste.com",
+            "senha": "SenhaInicial123",
+            "csrf_token": csrf_login
+        }, follow_redirects=False)
+        self.assertEqual(res_login.status_code, 302)
+
+        # 3. GET / com a sessão autenticada (navbar renderiza botão Sair)
+        res_home = self.client.get("/")
+        self.assertEqual(res_home.status_code, 200)
+        html_home = res_home.get_data(as_text=True)
+
+        m_logout = re.search(r'action="/logout"[^>]*>.*?name="csrf_token"\s+value="([^"]+)"', html_home, re.DOTALL)
+        self.assertIsNotNone(m_logout, "Formulário de logout com csrf_token não encontrado na navbar")
+        csrf_logout = m_logout.group(1)
+
+        # 4. POST /logout usando o token extraído do HTML
+        res_logout = self.client.post("/logout", data={"csrf_token": csrf_logout}, follow_redirects=False)
+        self.assertEqual(res_logout.status_code, 302)
+        self.assertEqual(res_logout.headers["Location"], "/")
+
+        # 5. Confirma que a sessão foi limpa e possui novo token anônimo
+        with self.client.session_transaction() as sess:
+            self.assertNotIn("user_id", sess)
+            self.assertNotIn("auth_fingerprint", sess)
+            self.assertIn("csrf_token", sess)
+
+    def test_20_headers_anti_cache_em_rotas_autenticadas_e_auth(self):
+        """Valida que cabeçalhos anti-cache são enviados para rotas autenticadas e login/logout."""
+        # 1. Rota de login anônima deve ter anti-cache para evitar reutilização de tokens CSRF defasados
+        res_login = self.client.get("/login")
+        self.assertIn("Cache-Control", res_login.headers)
+        self.assertIn("no-store", res_login.headers["Cache-Control"])
+
+        # 2. Rota autenticada deve ter anti-cache
+        self._login_client(self.client, self.user_aluno)
+        res_painel = self.client.get("/aluno/painel")
+        self.assertIn("Cache-Control", res_painel.headers)
+        self.assertIn("no-cache", res_painel.headers["Cache-Control"])
+        self.assertIn("no-store", res_painel.headers["Cache-Control"])
+
+    def test_21_before_request_garante_csrf_token_em_navegacao_get(self):
+        """Valida que requisição GET a qualquer página popula csrf_token na sessão se ela estiver vazia."""
+        novo_client = self.app.test_client()
+        res = novo_client.get("/")
+        self.assertEqual(res.status_code, 200)
+
+        with novo_client.session_transaction() as sess:
+            self.assertIn("csrf_token", sess)
+            self.assertTrue(len(sess["csrf_token"]) > 0)
+
+    def test_22_configuracao_csrf_secret_key_e_cookie_secure(self):
+        """Valida sincronia entre WTF_CSRF_SECRET_KEY e SECRET_KEY e configurações de cookies."""
+        from app.config import Config, ProductionConfig, DevelopmentConfig
+
+        self.assertEqual(Config.WTF_CSRF_SECRET_KEY, Config.SECRET_KEY)
+        self.assertFalse(DevelopmentConfig.SESSION_COOKIE_SECURE)
+        self.assertTrue(ProductionConfig.SESSION_COOKIE_SECURE)
+        self.assertTrue(TestingConfig.WTF_CSRF_ENABLED)
+
 
 if __name__ == "__main__":
     unittest.main()
