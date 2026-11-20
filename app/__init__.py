@@ -1,7 +1,7 @@
-from flask import Flask, url_for
-from flask_wtf.csrf import CSRFProtect
+from flask import Flask, url_for, request, session
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from werkzeug.routing import BuildError
-from app.config import DevelopmentConfig, ProductionConfig, TestingConfig, get_config_class
+from app.config import DevelopmentConfig, ProductionConfig, TestingConfig, get_config_class, is_production_mode
 from app import db
 from app.routes import register_routes
 
@@ -35,8 +35,28 @@ def create_app(config_class=None):
     else:
         app.config.from_object(DevelopmentConfig)
 
+    # Suporte a cabeçalhos de proxy reverso (Vercel / HTTPS)
+    if is_production_mode():
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
     # Inicialização da proteção CSRF global (Flask-WTF)
     csrf.init_app(app)
+
+    @app.before_request
+    def ensure_csrf_session_token():
+        """Garante a presença do token CSRF na sessão para qualquer requisição de navegação."""
+        if request.method in ("GET", "HEAD", "OPTIONS") and "csrf_token" not in session:
+            generate_csrf()
+
+    @app.after_request
+    def set_security_and_cache_headers(response):
+        """Evita armazenamento em cache de páginas autenticadas e formulários sensíveis para evitar tokens CSRF defasados."""
+        if "user_id" in session or request.endpoint in ("auth.login", "auth.logout"):
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, private"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+        return response
 
     # Ciclo de vida e teardown do PostgreSQL
     db.init_app(app)

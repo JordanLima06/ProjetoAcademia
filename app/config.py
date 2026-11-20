@@ -34,6 +34,7 @@ class Config:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 3600
     WTF_CSRF_CHECK_DEFAULT = True
+    WTF_CSRF_SECRET_KEY = SECRET_KEY
 
     # Configurações do PostgreSQL
     # Prioriza DATABASE_URL e utiliza POSTGRES_URL como alternativa
@@ -55,7 +56,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Configurações para ambiente de produção (Vercel + Neon)."""
     DEBUG = False
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "True").lower() in ("true", "1")
     IS_PRODUCTION = True
 
     @classmethod
