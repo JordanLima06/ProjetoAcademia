@@ -1,0 +1,290 @@
+{% extends "index.html" %}
+
+{% block title %}Painel do Aluno | FightAcademy{% endblock %}
+
+{% block extra_css %}
+<style>
+.painel-container {
+    max-width: 1100px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+}
+.card-painel {
+    background-color: var(--surface, #121A2B);
+    border: 1px solid rgba(120, 169, 255, 0.15);
+    border-radius: 12px;
+    padding: 28px;
+    color: var(--text, #F5F7FA);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    margin-bottom: 24px;
+}
+.stat-card {
+    background: var(--card, #172238);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+}
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+.status-ativa {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #4cd964;
+    border: 1px solid rgba(76, 217, 100, 0.3);
+}
+.status-pendente {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+.badge-modalidade {
+    background: rgba(23, 101, 237, 0.2);
+    color: var(--light, #78A9FF);
+    border: 1px solid rgba(120, 169, 255, 0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.btn-acao-primario {
+    background-color: var(--primary, #1765ED);
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+.btn-acao-primario:hover {
+    background-color: var(--hover, #0D53CC);
+    color: #fff;
+}
+.btn-acao-secundario {
+    background: transparent;
+    color: var(--light, #78A9FF);
+    border: 1px solid var(--primary, #1765ED);
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+.btn-acao-secundario:hover {
+    background: rgba(23, 101, 237, 0.15);
+    color: #fff;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="painel-container">
+    {# Mensagens de feedback flash #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }} mb-4" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Cabeçalho de Boas-Vindas -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <span class="text-uppercase" style="color: var(--light, #78A9FF); font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;">
+                Área do Aluno
+            </span>
+            <h1 class="h2 fw-bold mb-1 mt-1">Olá, {{ user.nome }}!</h1>
+            <p class="text-muted mb-0" style="color: var(--text, #F5F7FA)!important;">
+                {% if aluno.objetivo %}
+                    Foco de treino: <strong>{{ aluno.objetivo }}</strong>
+                {% else %}
+                    Acompanhe seus treinos, matrícula e informações cadastrais.
+                {% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('student.perfil') }}" class="btn-acao-secundario">
+                Editar Perfil
+            </a>
+            <a href="{{ url_for('enrollment.minha_matricula') }}" class="btn-acao-primario">
+                Minha Matrícula
+            </a>
+        </div>
+    </header>
+
+    <!-- Seção 1: Matrícula & Acesso às Modalidades -->
+    <section class="card-painel">
+        {% if matricula %}
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                <div>
+                    <span class="text-uppercase small" style="color: var(--text, #F5F7FA)!important;">Plano Contratado</span>
+                    <h2 class="h3 fw-bold mb-0 mt-1">{{ matricula.plano.nome if matricula.plano else 'FightAcademy' }}</h2>
+                </div>
+                <div>
+                    <span class="status-badge status-{{ matricula.status }}">{{ matricula.status }}</span>
+                </div>
+            </div>
+
+            {% if matricula.status == 'ativa' %}
+                <!-- Matrícula Ativa: Libera modalidades -->
+                <div class="p-3 rounded mb-4" style="background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.25);">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span style="color: #4cd964; font-weight: bold; font-size: 1.2rem;">✓</span>
+                        <strong style="color: #4cd964;">Acesso Liberado para Treinos</strong>
+                    </div>
+                    <p class="mb-0 small text-muted" style="color: var(--text, #F5F7FA)!important;">
+                        Vigência: de <strong>{{ matricula.data_inicio.strftime('%d/%m/%Y') }}</strong> até <strong>{{ matricula.data_fim.strftime('%d/%m/%Y') }}</strong>.
+                    </p>
+                </div>
+
+                <div class="mb-2">
+                    <h3 class="h5 fw-bold mb-3">Modalidades Liberadas para Você:</h3>
+                    {% if modalidades %}
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for m in modalidades %}
+                                <span class="badge-modalidade">{{ m.nome }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Acesso livre à infraestrutura da FightAcademy.</p>
+                    {% endif %}
+                </div>
+
+            {% elif matricula.status == 'pendente' %}
+                <!-- Matrícula Pendente: NÃO libera modalidades -->
+                <div class="p-3 rounded mb-4" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3);">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span style="font-size: 1.2rem;">⏳</span>
+                        <strong style="color: #ffc107;">Contratação Registrada (Aguardando Pagamento)</strong>
+                    </div>
+                    <p class="mb-0 small" style="color: var(--text, #F5F7FA);">
+                        Sua solicitação de matrícula foi registrada no plano {{ matricula.plano.nome if matricula.plano else '' }},
+                        mas o pagamento ainda não foi confirmado. <strong>As modalidades esportivas serão liberadas após a confirmação.</strong>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a href="{{ url_for('enrollment.minha_matricula') }}" class="btn-acao-secundario">
+                        Ver Parcelas Pendentes
+                    </a>
+                </div>
+            {% endif %}
+
+        {% else %}
+            <!-- Sem Matrícula -->
+            <div class="text-center py-4">
+                <div class="mb-3" style="font-size: 2.5rem;">🥊</div>
+                <h2 class="h4 fw-bold mb-2">Você ainda não possui uma matrícula ativa</h2>
+                <p class="text-muted mb-4" style="color: var(--text, #F5F7FA)!important; max-width: 500px; margin: 0 auto;">
+                    Escolha um plano de treinos para liberar o acesso às nossas modalidades e iniciar sua preparação.
+                </p>
+                <a href="{{ url_for('main.listar_planos') }}" class="btn-acao-primario">
+                    Conhecer Nossos Planos
+                </a>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Seção 2: Resumo Financeiro Demonstrativo (apenas se houver matrícula) -->
+    {% if matricula %}
+    <section class="card-painel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="h5 fw-bold mb-0">Resumo de Pagamentos (Demonstrativo)</h2>
+            <span class="badge bg-secondary">Simulação</span>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="small" style="color: var(--muted, #A7B2C5);">Próximo Vencimento</div>
+                    <div class="h4 fw-bold mt-2" style="color: var(--light, #78A9FF);">
+                        {% if proximo_vencimento %}
+                            {{ proximo_vencimento.strftime('%d/%m/%Y') }}
+                        {% else %}
+                            Em dia / Sem pendências
+                        {% endif %}
+                    </div>
+                    <div class="small text-muted">
+                        {% if parcelas_pendentes %}
+                            {{ parcelas_pendentes|length }} parcela(s) pendente(s)
+                        {% else %}
+                            Nenhuma parcela em aberto
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="small" style="color: var(--muted, #A7B2C5);">Total Pendente</div>
+                    <div class="h4 fw-bold mt-2 text-warning">
+                        R$ {{ "%.2f"|format(total_pendente)|replace(".", ",") }}
+                    </div>
+                    <div class="small text-muted">
+                        {{ parcelas_pendentes|length }} de {{ pagamentos|length }} parcela(s)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="small" style="color: var(--muted, #A7B2C5);">Condição Contratada</div>
+                    <div class="h4 fw-bold mt-2">
+                        {{ matricula.quantidade_parcelas }}x de R$ {{ "%.2f"|format(matricula.valor_cobranca)|replace(".", ",") }}
+                    </div>
+                    <div class="small text-muted">
+                        Total: R$ {{ "%.2f"|format(matricula.valor_total_contratado)|replace(".", ",") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-end">
+            <a href="{{ url_for('enrollment.minha_matricula') }}" class="btn-acao-secundario btn-sm">
+                Ver Histórico Completo de Parcelas →
+            </a>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Seção 3: Informações Cadastrais Rápidas -->
+    <section class="card-painel">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 fw-bold mb-0">Meus Dados Cadastrais</h2>
+            <a href="{{ url_for('student.perfil') }}" class="small" style="color: var(--light, #78A9FF); text-decoration: none;">
+                Editar Dados
+            </a>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="small" style="color: var(--muted, #A7B2C5);">E-mail</div>
+                <div class="fw-bold mt-1">{{ user.email }}</div>
+            </div>
+            <div class="col-md-4">
+                <div class="small" style="color: var(--muted, #A7B2C5);">Telefone / WhatsApp</div>
+                <div class="fw-bold mt-1">{{ aluno.telefone if aluno.telefone else 'Não informado' }}</div>
+            </div>
+            <div class="col-md-4">
+                <div class="small" style="color: var(--muted, #A7B2C5);">Data de Nascimento</div>
+                <div class="fw-bold mt-1">
+                    {{ aluno.data_nascimento.strftime('%d/%m/%Y') if aluno.data_nascimento else 'Não informada' }}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

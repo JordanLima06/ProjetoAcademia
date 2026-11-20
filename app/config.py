@@ -13,6 +13,11 @@ class Config:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "False").lower() in ("true", "1")
 
+    # Configurações de Proteção CSRF (Flask-WTF)
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_TIME_LIMIT = 3600
+    WTF_CSRF_CHECK_DEFAULT = True
+
     # Configurações do PostgreSQL
     DB_HOST = os.getenv("DB_HOST", "localhost")
     DB_PORT = os.getenv("DB_PORT", "5432")
@@ -39,3 +44,4 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
     SESSION_COOKIE_SECURE = False
+    WTF_CSRF_ENABLED = True

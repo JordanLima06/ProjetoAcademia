@@ -38,6 +38,7 @@
       method="POST"
       action="{{ url_for('login') }}"
     >
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="campo">
         <label for="email">E-mail</label>
 
@@ -172,6 +173,7 @@
         method="POST"
         action="{{ url_for('auth.solicitar_recuperacao') }}"
       >
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="campo">
           <label for="recuperar-email">E-mail</label>
 

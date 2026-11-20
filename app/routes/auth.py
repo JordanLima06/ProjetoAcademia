@@ -22,6 +22,7 @@ def login():
             session["user_nome"] = usuario.nome
             session["user_email"] = usuario.email
             session["user_tipo"] = usuario.tipo
+            session["auth_fingerprint"] = AuthService.get_password_fingerprint(usuario.senha)
 
             flash(mensagem, "success")
             next_url = request.args.get("next")
@@ -73,9 +74,9 @@ def cadastro():
         dados={}
     )
 
-@auth_bp.get("/logout")
+@auth_bp.post("/logout")
 def logout():
-    """Encerra a sessão atual com limpeza completa."""
+    """Encerra a sessão atual com limpeza completa via POST protegido por CSRF."""
     session.clear()
     flash("Você saiu da sua conta.", "info")
     return redirect(url_for("main.home"))

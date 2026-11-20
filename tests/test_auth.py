@@ -10,6 +10,7 @@ from app.models.user import User, Aluno
 from app.repositories.user_repository import UserRepository
 from app.services.auth_service import AuthService
 from app.utils.auth_decorators import login_required, role_required
+from tests.csrf_helper import get_csrf_token
 
 class AuthTestCase(unittest.TestCase):
     """Testes automatizados da Fase 2 — Autenticação, Usuários, Alunos e Permissões."""
@@ -23,6 +24,18 @@ class AuthTestCase(unittest.TestCase):
         UserRepository._TEST_USERS.clear()
         UserRepository._TEST_ALUNOS.clear()
         UserRepository._TEST_ID_SEQ = 1
+
+        # Intercepta self.client.post para injetar automaticamente token CSRF válido se não informado
+        orig_post = self.client.post
+        def post_with_csrf(url, *args, **kwargs):
+            if "data" in kwargs and isinstance(kwargs["data"], dict) and "csrf_token" not in kwargs["data"]:
+                token = get_csrf_token(self.client, self.app)
+                kwargs["data"]["csrf_token"] = token
+            elif len(args) > 0 and isinstance(args[0], dict) and "csrf_token" not in args[0]:
+                token = get_csrf_token(self.client, self.app)
+                args[0]["csrf_token"] = token
+            return orig_post(url, *args, **kwargs)
+        self.client.post = post_with_csrf
 
     def tearDown(self):
         self.ctx.pop()
@@ -229,6 +242,7 @@ class AuthTestCase(unittest.TestCase):
         # Com sessão ativa -> executa e disponibiliza g.user
         with self.app.test_request_context("/area-aluno"):
             session["user_id"] = 10
+            session["auth_fingerprint"] = AuthService.get_password_fingerprint(user.senha)
             res = dummy_view()
             self.assertEqual(res, "Ola, Atleta 1 (aluno)")
             self.assertEqual(g.user.id, 10)
@@ -256,6 +270,7 @@ class AuthTestCase(unittest.TestCase):
         with self.app.test_request_context("/painel-admin"):
             session["user_id"] = 20
             session["user_tipo"] = "admin"  # valor forjado ou desatualizado na sessão
+            session["auth_fingerprint"] = AuthService.get_password_fingerprint(user.senha)
             with self.assertRaises(Exception) as cm:
                 rota_admin()
             self.assertEqual(getattr(cm.exception, "code", None), 403)
@@ -266,6 +281,7 @@ class AuthTestCase(unittest.TestCase):
         with self.app.test_request_context("/painel-admin"):
             session["user_id"] = 20
             session["user_tipo"] = "aluno"  # sessão ainda desatualizada
+            session["auth_fingerprint"] = AuthService.get_password_fingerprint(user.senha)
             res = rota_admin()
             # Como role_required lê de g.user.tipo atualizado do banco, o acesso é liberado com sucesso!
             self.assertEqual(res, "Painel Administrativo")

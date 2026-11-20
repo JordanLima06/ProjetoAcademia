@@ -1,8 +1,11 @@
 from flask import Flask, url_for
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.routing import BuildError
 from app.config import DevelopmentConfig
 from app import db
 from app.routes import register_routes
+
+csrf = CSRFProtect()
 
 def create_app(config_class=DevelopmentConfig):
     """
@@ -21,6 +24,9 @@ def create_app(config_class=DevelopmentConfig):
     else:
         app.config.from_object(DevelopmentConfig)
 
+    # Inicialização da proteção CSRF global (Flask-WTF)
+    csrf.init_app(app)
+
     # Ciclo de vida e teardown do PostgreSQL
     db.init_app(app)
 
@@ -34,7 +40,7 @@ def create_app(config_class=DevelopmentConfig):
             try:
                 return url_for(endpoint, **values)
             except BuildError:
-                for bp in ["main", "auth", "enrollment"]:
+                for bp in ["main", "auth", "enrollment", "student"]:
                     try:
                         return url_for(f"{bp}.{endpoint}", **values)
                     except BuildError:

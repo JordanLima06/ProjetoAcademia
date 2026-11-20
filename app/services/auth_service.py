@@ -1,13 +1,19 @@
 import re
+import hmac
 import hashlib
 import logging
 from datetime import datetime, date
 from typing import Tuple, Optional
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
-from flask import current_app
+from flask import current_app, has_app_context
 from app.models.user import User, Aluno
-from app.repositories.user_repository import UserRepository
+from app.repositories.user_repository import (
+    UserRepository,
+    DatabaseError,
+    DatabaseConnectionError,
+    DatabaseQueryError
+)
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +81,15 @@ class AuthService:
             return False, "As senhas não coincidem.", None, None
 
         # 6. Unicidade de E-mail no PostgreSQL
-        usuario_existente = UserRepository.find_by_email(email)
+        try:
+            usuario_existente = UserRepository.find_by_email(email)
+        except DatabaseConnectionError:
+            logger.error("Falha de conexão com PostgreSQL ao verificar unicidade de e-mail.")
+            return False, "Serviço temporariamente indisponível. Tente novamente em instantes.", None, None
+        except DatabaseError as e:
+            logger.error(f"Erro no PostgreSQL ao verificar unicidade de e-mail: {e}")
+            return False, "Erro ao processar dados cadastrais. Tente novamente mais tarde.", None, None
+
         if usuario_existente:
             return False, "Este e-mail já está cadastrado no sistema.", None, None
 
@@ -111,6 +125,7 @@ class AuthService:
         """
         Valida credenciais para login.
         Verifica formato, hash da senha e se o usuário está ativo.
+        Trata explicitamente falhas de conexão ou erros de consulta SQL.
         """
         email = (email or "").strip().lower()
         senha = senha or ""
@@ -118,7 +133,15 @@ class AuthService:
         if not email or not senha:
             return False, "E-mail e senha são obrigatórios.", None
 
-        user = UserRepository.find_by_email(email)
+        try:
+            user = UserRepository.find_by_email(email)
+        except DatabaseConnectionError:
+            logger.error(f"Falha de conexão com PostgreSQL ao buscar usuário '{email}' para autenticação.")
+            return False, "Serviço temporariamente indisponível. Tente novamente em instantes.", None
+        except DatabaseError as e:
+            logger.error(f"Erro no PostgreSQL ao buscar usuário '{email}' para autenticação: {e}")
+            return False, "Erro ao processar login. Tente novamente mais tarde.", None
+
         if not user or not check_password_hash(user.senha, senha):
             return False, "E-mail ou senha incorretos.", None
 
@@ -128,9 +151,29 @@ class AuthService:
         return True, "Login realizado com sucesso!", user
 
     @classmethod
+    def get_password_fingerprint(cls, senha_hash: str) -> str:
+        """
+        Gera um identificador criptográfico seguro baseado em HMAC-SHA256 do hash da senha.
+        Utiliza a SECRET_KEY oficial da aplicação para blindagem criptográfica contra
+        dedução de fingerprint a partir de leitura direta do banco de dados.
+        Retorna string hexadecimal de 64 caracteres.
+        """
+        if not senha_hash:
+            return ""
+
+        secret_key = None
+        if has_app_context() and current_app:
+            secret_key = current_app.config.get("SECRET_KEY")
+        if not secret_key:
+            from app.config import Config
+            secret_key = getattr(Config, "SECRET_KEY", "fightacademy-secret-key-fallback")
+
+        key_bytes = secret_key.encode("utf-8") if isinstance(secret_key, str) else secret_key
+        return hmac.new(key_bytes, senha_hash.encode("utf-8"), hashlib.sha256).hexdigest()
+
+    @classmethod
     def _get_password_fingerprint(cls, senha_hash: str) -> str:
-        """Gera um identificador criptográfico curto do hash atual da senha para invalidar tokens após redefinição."""
-        return hashlib.sha256(senha_hash.encode("utf-8")).hexdigest()[:16]
+        return cls.get_password_fingerprint(senha_hash)
 
     @classmethod
     def generate_password_reset_token(cls, email: str) -> Tuple[bool, str, Optional[str]]:
@@ -142,7 +185,12 @@ class AuthService:
         if not email:
             return False, "Informe seu e-mail.", None
 
-        user = UserRepository.find_by_email(email)
+        try:
+            user = UserRepository.find_by_email(email)
+        except (DatabaseConnectionError, DatabaseError) as e:
+            logger.error(f"Erro ao buscar usuário '{email}' para recuperação de senha: {e}")
+            return False, "Serviço temporariamente indisponível. Tente novamente em instantes.", None
+
         if not user or not user.ativo:
             # Mensagem genérica para não revelar existência de contas
             return False, "Se o e-mail estiver cadastrado, as instruções serão processadas.", None
@@ -189,14 +237,18 @@ class AuthService:
         user_id = payload.get("user_id")
         token_fingerprint = payload.get("p_fingerprint")
 
-        user = UserRepository.find_by_id(user_id)
+        try:
+            user = UserRepository.find_by_id(user_id)
+        except (DatabaseConnectionError, DatabaseError) as e:
+            logger.error(f"Erro ao buscar usuário id {user_id} para redefinição de senha: {e}")
+            return False, "Serviço temporariamente indisponível. Tente novamente em instantes."
+
         if not user or not user.ativo:
             return False, "Usuário não localizado ou conta inativa."
 
-        # Validação contra reutilização do token:
-        # Se a senha já foi alterada, a digital do hash atual será diferente da gravada no token!
+        # Validação contra reutilização do token (comparação em tempo constante com hmac.compare_digest)
         current_fingerprint = cls._get_password_fingerprint(user.senha)
-        if current_fingerprint != token_fingerprint:
+        if not hmac.compare_digest(current_fingerprint, token_fingerprint or ""):
             return False, "Este link de recuperação já foi utilizado. Solicite um novo se necessário."
 
         nova_senha_hash = generate_password_hash(nova_senha)
