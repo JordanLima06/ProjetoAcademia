@@ -224,5 +224,181 @@ class PostgreSQLResilienceTestCase(unittest.TestCase):
         with self.client.session_transaction() as sess:
             self.assertEqual(sess.get("user_id"), 1)
 
+    # -------------------------------------------------------------------------
+    # TESTES DE CONEXÃO MULTI-AMBIENTE: NEON + VERCEL VS DESENVOLVIMENTO LOCAL
+    # -------------------------------------------------------------------------
+
+    def test_11_conexao_modo_uri_prioriza_database_url_com_realdictcursor(self):
+        """Valida que a conexão via URI prioriza DATABASE_URL, preserva RealDictCursor e parâmetros Neon."""
+        from unittest.mock import patch, MagicMock
+        from app.db import get_db_connection
+        from psycopg2.extras import RealDictCursor
+        from flask import g
+
+        neon_url = "postgresql://academia_owner:segredo123@ep-cool-sun-12345.sa-east-1.aws.neon.tech/academia?sslmode=require&channel_binding=require"
+
+        with patch("app.db._get_config_value", return_value=neon_url):
+            with patch("psycopg2.connect") as mock_connect:
+                mock_conn = MagicMock()
+                mock_connect.return_value = mock_conn
+
+                # Força limpeza de conexão em g
+                g.pop("db", None)
+
+                conn = get_db_connection()
+
+                self.assertIsNotNone(conn)
+                mock_connect.assert_called_once()
+                args, kwargs = mock_connect.call_args
+
+                # Primeiro argumento deve ser a URL preservada
+                self.assertEqual(args[0], neon_url)
+                self.assertIn("sslmode=require", args[0])
+                self.assertIn("channel_binding=require", args[0])
+                # RealDictCursor obrigatório
+                self.assertEqual(kwargs.get("cursor_factory"), RealDictCursor)
+
+    def test_12_conexao_modo_uri_usa_postgres_url_como_alternativa(self):
+        """Valida que POSTGRES_URL é utilizada como alternativa quando DATABASE_URL não estiver definida."""
+        from unittest.mock import patch, MagicMock
+        from app.db import get_db_connection
+        from psycopg2.extras import RealDictCursor
+        from flask import g
+
+        neon_postgres_url = "postgres://academia_owner:segredo123@ep-cool-sun-12345.sa-east-1.aws.neon.tech/academia?sslmode=require"
+
+        # Simula ausência de DATABASE_URL e presença de POSTGRES_URL no ambiente
+        with patch.dict("os.environ", {"DATABASE_URL": "", "POSTGRES_URL": neon_postgres_url}, clear=False):
+            with patch("app.db._get_config_value", return_value=None):
+                with patch("psycopg2.connect") as mock_connect:
+                    mock_conn = MagicMock()
+                    mock_connect.return_value = mock_conn
+
+                    g.pop("db", None)
+                    conn = get_db_connection()
+
+                    self.assertIsNotNone(conn)
+                    mock_connect.assert_called_once()
+                    args, kwargs = mock_connect.call_args
+
+                    # O prefixo 'postgres://' deve ter sido normalizado para 'postgresql://'
+                    self.assertTrue(args[0].startswith("postgresql://"))
+                    self.assertIn("sslmode=require", args[0])
+                    self.assertEqual(kwargs.get("cursor_factory"), RealDictCursor)
+
+    def test_13_conexao_modo_local_usa_parametros_individuais_com_realdictcursor(self):
+        """Valida que em desenvolvimento local sem URL, a conexão utiliza os parâmetros individuais e RealDictCursor."""
+        from unittest.mock import patch, MagicMock
+        from app.db import get_db_connection
+        from psycopg2.extras import RealDictCursor
+        from flask import g
+
+        # Simula ambiente local (sem DATABASE_URL nem POSTGRES_URL)
+        with patch.dict("os.environ", {"DATABASE_URL": "", "POSTGRES_URL": "", "VERCEL": "", "APP_ENV": "", "FLASK_ENV": "development"}):
+            with patch("app.db._get_config_value") as mock_cfg:
+                def config_side_effect(key, default=None):
+                    configs = {
+                        "DATABASE_URL": None,
+                        "DB_HOST": "127.0.0.1",
+                        "DB_PORT": "5432",
+                        "DB_NAME": "academia_local",
+                        "DB_USER": "postgres_local",
+                        "DB_PASSWORD": "admin_local"
+                    }
+                    return configs.get(key, default)
+                mock_cfg.side_effect = config_side_effect
+
+                with patch("psycopg2.connect") as mock_connect:
+                    mock_conn = MagicMock()
+                    mock_connect.return_value = mock_conn
+
+                    g.pop("db", None)
+                    conn = get_db_connection()
+
+                    self.assertIsNotNone(conn)
+                    mock_connect.assert_called_once_with(
+                        host="127.0.0.1",
+                        port="5432",
+                        dbname="academia_local",
+                        user="postgres_local",
+                        password="admin_local",
+                        cursor_factory=RealDictCursor
+                    )
+
+    def test_14_producao_sem_url_gera_erro_explicito_e_proibe_localhost(self):
+        """Valida que em produção a ausência de DATABASE_URL/POSTGRES_URL gera erro explícito e proíbe localhost."""
+        from unittest.mock import patch
+        from app.db import get_db_connection
+        from app.config import ProductionConfig
+        from flask import g
+
+        # 1. Validação na classe de configuração
+        with patch.dict("os.environ", {"DATABASE_URL": "", "POSTGRES_URL": ""}):
+            with self.assertRaises(RuntimeError) as ctx_cfg:
+                ProductionConfig.validate_production_config()
+            self.assertIn("DATABASE_URL ou POSTGRES_URL não configurada", str(ctx_cfg.exception))
+            self.assertIn("É estritamente proibido utilizar localhost como fallback", str(ctx_cfg.exception))
+
+        # 2. Validação no método get_db_connection durante produção
+        with patch.dict("os.environ", {"DATABASE_URL": "", "POSTGRES_URL": "", "VERCEL": "1"}):
+            with patch("app.db._get_config_value", return_value=None):
+                g.pop("db", None)
+                with self.assertRaises(RuntimeError) as ctx_db:
+                    get_db_connection()
+                self.assertIn("É estritamente proibido utilizar localhost como fallback em ambiente de produção", str(ctx_db.exception))
+
+    def test_15_selecao_ambiente_vercel_app_env_e_flask_env(self):
+        """Valida a seleção dinâmica da configuração para VERCEL=1, APP_ENV=production, FLASK_ENV=production e dev."""
+        from unittest.mock import patch
+        from app.config import get_config_class, ProductionConfig, DevelopmentConfig, TestingConfig
+
+        # VERCEL=1
+        with patch.dict("os.environ", {"VERCEL": "1", "APP_ENV": "", "FLASK_ENV": ""}):
+            self.assertEqual(get_config_class(), ProductionConfig)
+
+        # APP_ENV=production
+        with patch.dict("os.environ", {"VERCEL": "", "APP_ENV": "production", "FLASK_ENV": ""}):
+            self.assertEqual(get_config_class(), ProductionConfig)
+
+        # FLASK_ENV=production
+        with patch.dict("os.environ", {"VERCEL": "", "APP_ENV": "", "FLASK_ENV": "production"}):
+            self.assertEqual(get_config_class(), ProductionConfig)
+
+        # Padrão desenvolvimento
+        with patch.dict("os.environ", {"VERCEL": "", "APP_ENV": "", "FLASK_ENV": ""}):
+            self.assertEqual(get_config_class(), DevelopmentConfig)
+
+        # Testes
+        with patch.dict("os.environ", {"FLASK_ENV": "testing"}):
+            self.assertEqual(get_config_class(), TestingConfig)
+
+    def test_16_tratamento_erros_e_mascaramento_credenciais_em_logs(self):
+        """Valida que credenciais e senhas não aparecem em mensagens de erro ou logs."""
+        from app.db import _sanitize_db_error
+
+        # Erro contendo URI com senha
+        err_uri = Exception("could not connect to postgresql://academia_owner:minhaSenhaSecreta123@ep-xyz.neon.tech/academia")
+        msg_uri_sanitizada = _sanitize_db_error(err_uri)
+        self.assertNotIn("minhaSenhaSecreta123", msg_uri_sanitizada)
+        self.assertIn(":*****@", msg_uri_sanitizada)
+
+        # Erro contendo password=
+        err_kv = Exception("FATAL: password authentication failed for user academia_owner password=segredoSuperForte!")
+        msg_kv_sanitizada = _sanitize_db_error(err_kv)
+        self.assertNotIn("segredoSuperForte!", msg_kv_sanitizada)
+        self.assertIn("password=*****", msg_kv_sanitizada)
+
+    def test_17_preservacao_parametros_neon(self):
+        """Valida que normalize_database_url converte o scheme e preserva 100% dos parâmetros de query Neon."""
+        from app.db import normalize_database_url
+
+        url_original = "postgres://academia_owner:pwd@ep-xyz.sa-east-1.aws.neon.tech/academia?sslmode=require&channel_binding=require&endpoint=ep-xyz"
+        url_normalizada = normalize_database_url(url_original)
+
+        self.assertTrue(url_normalizada.startswith("postgresql://"))
+        self.assertIn("sslmode=require", url_normalizada)
+        self.assertIn("channel_binding=require", url_normalizada)
+        self.assertIn("endpoint=ep-xyz", url_normalizada)
+
 if __name__ == "__main__":
     unittest.main()
