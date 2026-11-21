@@ -159,6 +159,7 @@
 
         <!-- Formulário de Contratação -->
         <form method="POST" action="{{ url_for('enrollment.processar_contratacao', plano_slug=plano.slug) }}" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <h2 class="secao-titulo">1. Selecione a Condição Comercial</h2>
             {% if opcoes_pagamento %}
                 <div class="opcoes-cobranca mb-4">

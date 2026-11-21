@@ -59,7 +59,7 @@
     border-spacing: 0 8px;
 }
 .tabela-pagamentos th {
-    color: var(--muted, #A7B2C5);
+    color: var(--text, #F5F7FA);
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -114,15 +114,21 @@
     {% endwith %}
 
     {% if matricula %}
-        <!-- Card da Matrícula Ativa -->
+        <!-- Card da Matrícula Atual -->
         <div class="card-painel">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                 <div>
                     <span class="text-uppercase" style="color: var(--light, #78A9FF); font-weight: 600; font-size: 0.85rem;">
-                        Matrícula Ativa #{{ matricula.id }}
+                        {% if matricula.status == 'ativa' %}
+                            Matrícula Ativa #{{ matricula.id }}
+                        {% elif matricula.status == 'pendente' %}
+                            Matrícula Pendente #{{ matricula.id }}
+                        {% else %}
+                            Matrícula #{{ matricula.id }}
+                        {% endif %}
                     </span>
                     <h1 class="h2 fw-bold mb-1">{{ matricula.plano.nome if matricula.plano else 'Plano FightAcademy' }}</h1>
-                    <p class="text-muted mb-0" style="color: var(--muted, #A7B2C5);">
+                    <p class="text-muted mb-0" style="color: var(--text, #F5F7FA)!important;">
                         Aluno: {{ g.user.nome }}
                     </p>
                 </div>
@@ -130,6 +136,15 @@
                     <span class="status-badge status-{{ matricula.status }}">{{ matricula.status }}</span>
                 </div>
             </div>
+
+            {% if matricula.status == 'pendente' %}
+            <div class="alert alert-warning d-flex align-items-center gap-3 mb-4" role="alert" style="background: rgba(255, 193, 7, 0.12); border-color: rgba(255, 193, 7, 0.4); color: #ffc107;">
+                <span style="font-size: 1.5rem;" aria-hidden="true">⏳</span>
+                <div>
+                    <strong>Aguardando Pagamento:</strong> A contratação do seu plano foi registrada com sucesso, mas o pagamento ainda não foi realizado. As modalidades estarão liberadas para acesso aos treinos após a confirmação.
+                </div>
+            </div>
+            {% endif %}
 
             <!-- Dados da Vigência e Valores -->
             <div class="row g-3 mb-4">
@@ -173,13 +188,14 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <p class="text-muted" style="color: var(--muted, #A7B2C5);">Acesso livre a todas as atividades da FightAcademy.</p>
+                    <p class="text-muted" style="color: var(--text, #F5F7FA);">Acesso livre a todas as atividades da FightAcademy.</p>
                 {% endif %}
             </div>
 
             <!-- Botão de Cancelamento -->
             <div class="border-top pt-3 mt-4 d-flex justify-content-end">
                 <form method="POST" action="{{ url_for('enrollment.cancelar_matricula') }}" onsubmit="return confirm('Tem certeza que deseja cancelar sua matrícula ativa?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="matricula_id" value="{{ matricula.id }}">
                     <button type="submit" class="btn-cancelar-matricula">
                         Cancelar Matrícula
@@ -194,7 +210,7 @@
                 <h2 class="h5 fw-bold mb-0">Parcelas e Registros de Pagamento</h2>
                 <span class="badge bg-secondary">Simulação Demonstrativa</span>
             </div>
-            <p class="small text-muted mb-4" style="color: var(--muted, #A7B2C5);">
+            <p class="small text-muted mb-4" style="color: var(--text, #F5F7FA)!important;">
                 Registros gerados na tabela de pagamentos para controle demonstrativo de vencimentos.
             </p>
 
@@ -241,7 +257,7 @@
         <div class="card-painel text-center py-5">
             <div class="mb-3" style="font-size: 3rem;">🥋</div>
             <h1 class="h3 fw-bold mb-2">Você ainda não possui uma matrícula ativa</h1>
-            <p class="text-muted mb-4" style="color: var(--muted, #A7B2C5); max-width: 500px; margin: 0 auto;">
+            <p class="text-muted mb-4" style="color: var(--text, #F5F7FA)!important; max-width: 500px; margin: 0 auto;">
                 Explore nossos planos e escolha a melhor opção para iniciar seus treinos na FightAcademy.
             </p>
             <a href="{{ url_for('main.listar_planos') }}" class="btn btn-primary px-4 py-2 fw-bold" style="background-color: var(--primary, #1765ED); border: none;">

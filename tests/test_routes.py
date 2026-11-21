@@ -1,6 +1,7 @@
 import unittest
 from app import create_app
 from app.config import TestingConfig
+from tests.csrf_helper import get_csrf_token
 
 class RoutesTestCase(unittest.TestCase):
     """Testes automatizados das rotas do FightAcademy."""
@@ -8,6 +9,17 @@ class RoutesTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app(TestingConfig)
         self.client = self.app.test_client()
+
+        orig_post = self.client.post
+        def post_with_csrf(url, *args, **kwargs):
+            if "data" in kwargs and isinstance(kwargs["data"], dict) and "csrf_token" not in kwargs["data"]:
+                token = get_csrf_token(self.client, self.app)
+                kwargs["data"]["csrf_token"] = token
+            elif len(args) > 0 and isinstance(args[0], dict) and "csrf_token" not in args[0]:
+                token = get_csrf_token(self.client, self.app)
+                args[0]["csrf_token"] = token
+            return orig_post(url, *args, **kwargs)
+        self.client.post = post_with_csrf
 
     def test_home_page(self):
         response = self.client.get("/")

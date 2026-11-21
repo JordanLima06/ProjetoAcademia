@@ -209,7 +209,8 @@ class EnrollmentRepository:
                 if candidatos:
                     candidatos.sort(key=lambda m: (0 if m.status == "ativa" else 1, -(m.id or 0)))
                     mat = candidatos[0]
-                    mat.modalidades = cls.get_modalities_by_matricula_id(mat.id)
+                    if not mat.modalidades:
+                        mat.modalidades = cls.get_modalities_by_matricula_id(mat.id)
                     return mat
                 return None
             return None
@@ -246,7 +247,8 @@ class EnrollmentRepository:
                 if candidatos:
                     candidatos.sort(key=lambda m: (0 if m.status == "ativa" else 1, -(m.id or 0)))
                     mat = candidatos[0]
-                    mat.modalidades = cls.get_modalities_by_matricula_id(mat.id)
+                    if not mat.modalidades:
+                        mat.modalidades = cls.get_modalities_by_matricula_id(mat.id)
                     return mat
             return None
 

@@ -52,6 +52,8 @@
               novalidate
               aria-describedby="aviso-privacidade">
 
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             {# Campo honeypot anti-spam invisível para humanos #}
             <div class="hp-field" aria-hidden="true">
                 <label for="website_hp">Não preencha este campo</label>
