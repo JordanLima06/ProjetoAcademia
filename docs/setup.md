@@ -57,3 +57,6 @@ Para rodar os testes:
 pip install pytest
 pytest
 ```
+
+
+## SMTP -> Mailtrap
