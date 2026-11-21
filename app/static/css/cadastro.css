@@ -20,12 +20,14 @@
 .cadastro-section {
   width: 100%;
   max-width: 780px;
+  min-width: 0;
   padding: 40px;
   background: var(--color-surface, #121A2B);
   border: 1px solid var(--color-border, #2B3A55);
   border-radius: var(--radius-lg, 16px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
 /* Cabeçalho */
@@ -66,18 +68,24 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .cadastro-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .campo-cheio {
@@ -94,7 +102,10 @@
 /* Inputs e Selects */
 .campo input,
 .campo select {
+  display: block;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 50px;
   padding: 12px 14px;
   color: var(--color-text, #F5F7FA);
@@ -107,6 +118,25 @@
   transition:
     border-color var(--transition-default, 0.25s ease),
     box-shadow var(--transition-default, 0.25s ease);
+}
+
+.campo input[type="date"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
+  line-height: 1.4;
+}
+
+.campo input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.campo input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
 }
 
 .campo select {
@@ -153,24 +183,70 @@
   border-color: #FF737A;
 }
 
-/* Campo de Senha com Toggle */
+/* Campo de Senha com Toggle (Flexbox responsivo sem posicionamento frágil) */
 .senha-wrapper {
-  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 50px;
+  background: var(--color-dark-blue, #0D1424);
+  border: 1px solid var(--color-border, #2B3A55);
+  border-radius: var(--radius-md, 10px);
+  box-sizing: border-box;
+  transition:
+    border-color var(--transition-default, 0.25s ease),
+    box-shadow var(--transition-default, 0.25s ease);
 }
 
-.senha-wrapper input {
-  padding-right: 86px !important;
+.senha-wrapper:focus-within {
+  border-color: var(--color-primary, #1765ED);
+  box-shadow: 0 0 0 3px rgba(23, 101, 237, 0.25);
 }
 
-.toggle-senha {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+.senha-wrapper:has(input:focus-visible) {
+  outline: 3px solid var(--color-primary-light, #78A9FF);
+  outline-offset: 2px;
+}
+
+.senha-wrapper:has(input[aria-invalid="true"]) {
+  border-color: #FF737A;
+}
+
+.campo .senha-wrapper input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 12px 8px 12px 14px;
+  border: 0;
+  background: transparent;
+  border-radius: inherit;
+  box-shadow: none;
+}
+
+.campo .senha-wrapper input:focus,
+.campo .senha-wrapper input:focus-visible {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.senha-wrapper .toggle-senha {
+  position: static;
+  top: auto;
+  right: auto;
+  transform: none;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 8px 12px;
+  margin-right: 4px;
   color: var(--color-primary-light, #78A9FF);
   background: transparent;
   border: 0;
@@ -179,10 +255,12 @@
   font-family: inherit;
   font-size: 0.85rem;
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   transition: color var(--transition-fast, 0.15s ease);
 }
 
-.toggle-senha:hover {
+.senha-wrapper .toggle-senha:hover {
   color: var(--color-white, #FFFFFF);
 }
 
@@ -336,7 +414,7 @@
   }
 
   .cadastro-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
   }
 
@@ -349,6 +427,31 @@
   }
 }
 
+@media (max-width: 480px) {
+  .cadastro-section {
+    padding: 24px 16px;
+  }
+
+  .senha-wrapper .toggle-senha {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .cadastro-main {
+    padding: 20px 10px;
+  }
+
+  .cadastro-section {
+    padding: 20px 14px;
+  }
+
+  .cadastro-cabecalho h1 {
+    font-size: 1.5rem;
+  }
+}
+
 /* Acessibilidade — Movimento Reduzido */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -356,6 +459,10 @@
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+
+  .btn-cadastro:hover:not(:disabled),
+  .btn-cadastro:active:not(:disabled) {
     transform: none !important;
   }
 }

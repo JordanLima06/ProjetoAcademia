@@ -188,12 +188,26 @@
             <div class="text-center py-4">
                 <div class="mb-3" style="font-size: 2.5rem;">🥊</div>
                 <h2 class="h4 fw-bold mb-2">Você ainda não possui uma matrícula ativa</h2>
+                {% if plano_pendente %}
+                <p class="text-muted mb-4" style="color: var(--text, #F5F7FA)!important; max-width: 520px; margin: 0 auto;">
+                    Você selecionou o plano <strong>{{ plano_pendente.nome }}</strong> no cadastro. Conclua a contratação para ativar sua matrícula e liberar suas modalidades.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="{{ url_for('enrollment.contratar', plano_slug=plano_pendente.slug) }}" class="btn-acao-primario">
+                        Concluir Contratação — {{ plano_pendente.nome }}
+                    </a>
+                    <a href="{{ url_for('main.listar_planos') }}" class="btn-acao-secundario">
+                        Conhecer Nossos Planos
+                    </a>
+                </div>
+                {% else %}
                 <p class="text-muted mb-4" style="color: var(--text, #F5F7FA)!important; max-width: 500px; margin: 0 auto;">
                     Escolha um plano de treinos para liberar o acesso às nossas modalidades e iniciar sua preparação.
                 </p>
                 <a href="{{ url_for('main.listar_planos') }}" class="btn-acao-primario">
                     Conhecer Nossos Planos
                 </a>
+                {% endif %}
             </div>
         {% endif %}
     </section>

@@ -36,9 +36,13 @@
       class="login-form"
       id="login-form"
       method="POST"
-      action="{{ url_for('login') }}"
+      action="{{ url_for('auth.login') }}"
     >
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% set next_hidden = next_url if next_url is defined and next_url else request.args.get('next', '') %}
+      {% if next_hidden %}
+      <input type="hidden" name="next" value="{{ next_hidden }}">
+      {% endif %}
       <div class="campo">
         <label for="email">E-mail</label>
 

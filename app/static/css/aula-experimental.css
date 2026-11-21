@@ -20,12 +20,14 @@
 .aula-section {
   width: 100%;
   max-width: 760px;
+  min-width: 0;
   padding: 40px;
   background: var(--color-surface, #121A2B);
   border: 1px solid var(--color-border, #2B3A55);
   border-radius: var(--radius-lg, 16px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
 /* Cabeçalho */
@@ -64,18 +66,24 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .aula-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .campo-cheio {
@@ -105,7 +113,10 @@
 .campo input,
 .campo select,
 .campo textarea {
+  display: block;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 12px 14px;
   color: var(--color-text, #F5F7FA);
   background: var(--color-dark-blue, #0D1424);
@@ -117,6 +128,21 @@
   transition:
     border-color var(--transition-default, 0.25s ease),
     box-shadow var(--transition-default, 0.25s ease);
+}
+
+.campo input[type="date"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
+  line-height: 1.4;
+}
+
+.campo input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
 }
 
 .campo input,
@@ -301,7 +327,7 @@
   }
 
   .aula-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 18px;
   }
 
@@ -321,6 +347,10 @@
   *::after {
     transition: none !important;
     animation: none !important;
+  }
+
+  .btn-agendar:hover:not(:disabled),
+  .btn-agendar:active:not(:disabled) {
     transform: none !important;
   }
 }

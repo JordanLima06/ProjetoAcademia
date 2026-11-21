@@ -1,6 +1,6 @@
 import logging
 from datetime import date
-from flask import Blueprint, render_template, request, redirect, url_for, flash, g
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g, session
 from app.utils.auth_decorators import login_required, role_required
 from app.repositories.user_repository import UserRepository
 from app.services.academy_service import AcademyService
@@ -28,6 +28,8 @@ def contratar(plano_slug):
     # Verifica se já possui matrícula vigente (ativa ou pendente)
     matricula_atual = EnrollmentService.obter_matricula_atual(aluno.id)
     if matricula_atual and matricula_atual.status in ("ativa", "pendente") and matricula_atual.data_fim >= date.today():
+        session.pop("pending_plan_slug", None)
+        session.pop("pending_plan_user_id", None)
         nome_plano = matricula_atual.plano.nome if matricula_atual.plano else "atual"
         status_nome = "ativa" if matricula_atual.status == "ativa" else "pendente de pagamento"
         flash(
@@ -97,6 +99,8 @@ def processar_contratacao(plano_slug):
     )
 
     if sucesso:
+        session.pop("pending_plan_slug", None)
+        session.pop("pending_plan_user_id", None)
         flash(mensagem, "success")
         return redirect(url_for("enrollment.minha_matricula"))
     else:

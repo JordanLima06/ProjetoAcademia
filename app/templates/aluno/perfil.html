@@ -17,6 +17,13 @@
     color: var(--text, #F5F7FA);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     margin-bottom: 28px;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: clip;
+}
+.card-perfil .row > [class*="col-"] {
+    min-width: 0;
+    max-width: 100%;
 }
 .form-label {
     font-weight: 600;
@@ -30,6 +37,23 @@
     color: var(--text, #F5F7FA);
     border-radius: 8px;
     padding: 12px 16px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+input[type="date"].form-control {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    color-scheme: dark;
+    line-height: 1.4;
+}
+input[type="date"].form-control::-webkit-date-and-time-value {
+    text-align: left;
 }
 .form-control:focus, .form-select:focus {
     background-color: var(--card, #172238);
@@ -58,6 +82,15 @@
 .secao-divider {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     margin: 20px 0 24px;
+}
+@media (max-width: 576px) {
+    .perfil-container {
+        margin: 24px auto 40px;
+        padding: 0 12px;
+    }
+    .card-perfil {
+        padding: 20px 16px;
+    }
 }
 </style>
 {% endblock %}

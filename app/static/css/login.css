@@ -130,27 +130,69 @@
 ======================================== */
 
 .senha-controle {
-    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+    min-height: 50px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-dark-blue);
+    transition:
+        border-color var(--transition-default),
+        box-shadow var(--transition-default);
 }
 
-.senha-controle input {
-    padding-right: 54px;
+.senha-controle:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(23 101 237 / 20%);
 }
 
-.mostrar-senha {
-    position: absolute;
-    top: 50%;
-    right: 5px;
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
+.senha-controle:has(input:focus-visible) {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 3px;
+}
+
+.senha-controle:has(input[aria-invalid="true"]) {
+    border-color: #ff7777;
+}
+
+.campo .senha-controle input {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 48px;
+    padding: 13px 8px 13px 14px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.campo .senha-controle input:focus,
+.login-section .senha-controle input:focus-visible {
+    border: 0;
+    outline: none;
+    box-shadow: none;
+}
+
+.senha-controle .mostrar-senha {
+    position: static;
+    top: auto;
+    right: auto;
+    transform: none;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    margin-right: 3px;
     padding: 0;
-    transform: translateY(-50%);
     border: none;
     border-radius: var(--radius-sm);
     background: transparent;
@@ -158,7 +200,7 @@
     cursor: pointer;
 }
 
-.mostrar-senha:hover {
+.senha-controle .mostrar-senha:hover {
     background: var(--color-card);
     color: var(--color-primary-light);
 }
@@ -392,6 +434,12 @@
 .login-section input:focus-visible {
     outline: 3px solid var(--color-primary-light);
     outline-offset: 3px;
+}
+
+.login-section .senha-controle input:focus-visible {
+    outline: none;
+    box-shadow: none;
+    border: 0;
 }
 
 @media (hover: none) {

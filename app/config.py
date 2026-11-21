@@ -2,6 +2,12 @@ import os
 from datetime import timedelta
 from typing import Optional, Type
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 def is_production_mode() -> bool:
     """
     Identifica se o ambiente de execução atual é de produção através de:

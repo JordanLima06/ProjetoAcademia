@@ -609,12 +609,21 @@ section[id] {
 .form-control,
 .form-select {
   min-height: 46px;
+  max-width: 100%;
+  min-width: 0;
 
   background-color: var(--color-dark-blue);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
 
   color: var(--color-text);
+}
+
+input[type="date"] {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  color-scheme: dark;
 }
 
 .form-control::placeholder {

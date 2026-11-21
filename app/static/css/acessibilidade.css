@@ -159,8 +159,7 @@
 }
 
 
-.senha-wrapper .toggle-senha {
-    top: 50%;
-    right: 4px;
-    transform: translateY(-50%);
+.senha-wrapper .toggle-senha,
+.senha-controle .mostrar-senha {
+    flex-shrink: 0;
 }

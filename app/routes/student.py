@@ -2,6 +2,7 @@ import logging
 from flask import Blueprint, render_template, request, redirect, url_for, flash, g, session
 from app.utils.auth_decorators import login_required, role_required
 from app.repositories.user_repository import UserRepository
+from app.services.academy_service import AcademyService
 from app.services.student_service import StudentService
 from app.services.auth_service import AuthService
 
@@ -23,6 +24,18 @@ def painel():
         flash("Perfil de aluno não localizado.", "danger")
         return redirect(url_for("main.home"))
 
+    plano_pendente = None
+    if dados_dashboard["matricula"]:
+        session.pop("pending_plan_slug", None)
+        session.pop("pending_plan_user_id", None)
+    else:
+        pending_slug = session.get("pending_plan_slug")
+        pending_uid = session.get("pending_plan_user_id")
+        if pending_slug and (pending_uid is None or pending_uid == g.user.id):
+            plano_cand = AcademyService.get_plan(pending_slug)
+            if plano_cand and plano_cand.ativo:
+                plano_pendente = plano_cand
+
     return render_template(
         "aluno/painel.html",
         dashboard=dados_dashboard,
@@ -35,7 +48,8 @@ def painel():
         parcelas_pendentes=dados_dashboard["parcelas_pendentes"],
         proximo_vencimento=dados_dashboard["proximo_vencimento"],
         total_pago=dados_dashboard["total_pago"],
-        total_pendente=dados_dashboard["total_pendente"]
+        total_pendente=dados_dashboard["total_pendente"],
+        plano_pendente=plano_pendente
     )
 
 @student_bp.route("/perfil", methods=["GET", "POST"])

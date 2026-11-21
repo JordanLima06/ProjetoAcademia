@@ -30,8 +30,8 @@
             {% endif %}
         {% endwith %}
 
-        {% set plano_param = request.args.get('plano', '') %}
-        {% set modalidade_param = request.args.get('modalidade', '') %}
+        {% set plano_param = (dados.get('plano') if dados else '') or request.args.get('plano', '') %}
+        {% set modalidade_param = (dados.get('modalidade') if dados else '') or request.args.get('modalidade', '') %}
 
         <form id="cadastro-form"
               class="cadastro-form"
@@ -52,6 +52,7 @@
                         type="text"
                         id="nome"
                         name="nome"
+                        value="{{ dados.get('nome', '') if dados else '' }}"
                         placeholder="Digite seu nome completo"
                         autocomplete="name"
                         maxlength="120"
@@ -68,6 +69,7 @@
                         type="email"
                         id="email"
                         name="email"
+                        value="{{ dados.get('email', '') if dados else '' }}"
                         placeholder="seuemail@exemplo.com"
                         autocomplete="email"
                         inputmode="email"
@@ -85,6 +87,7 @@
                         type="tel"
                         id="telefone"
                         name="telefone"
+                        value="{{ dados.get('telefone', '') if dados else '' }}"
                         placeholder="(00) 00000-0000"
                         autocomplete="tel"
                         inputmode="tel"
@@ -102,6 +105,7 @@
                         type="date"
                         id="data_nascimento"
                         name="data_nascimento"
+                        value="{{ dados.get('data_nascimento', '') if dados else '' }}"
                         autocomplete="bday"
                         required
                         aria-describedby="data-nascimento-erro"
